@@ -1,0 +1,179 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    background-color: #F8F8FF;
+}
+
+i {
+    width: 30px;
+    height: 30px;
+}
+
+header {
+    background: rgb(0,0,0);
+    background: linear-gradient(#46b83d, #111e0b);
+}
+
+h1 {
+    font-family: "Freeman", sans-serif;
+}
+
+.spanLoja {
+    font-family: "Roboto", sans-serif;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    background-color: #000000;
+    width: "100%";
+  }
+  
+  .navbar {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-family: "Freeman", sans-serif;  
+  }
+  
+  .links-navbar {
+    margin: 0 16px;
+    font-size: 24px;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .links-navbar a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .links-navbar a:hover {
+    color: #46b83d;
+  }
+
+  /* Estilo do contêiner do carrinho */
+.cart-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Estilo de cada item do carrinho */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Estilo da informação do produto */
+.item-info {
+    display: flex;
+    align-items: center;
+}
+
+/* Estilo da imagem do produto */
+.product-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 20px;
+}
+
+/* Estilo do título e descrição do produto */
+.item-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.item-description {
+    color: #555;
+    font-size: 14px;
+}
+
+/* Estilo do preço e botão de remoção */
+.item-price {
+    text-align: right;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.remove-btn {
+    background-color: #e3342f;
+    color: #FFf;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: color 0.3s;
+    border-radius: 10px;
+    padding: 6px;
+    font-weight: bold;
+}
+
+.remove-btn:hover {
+    color: #cc1f1a;
+    background: transparent;
+}
+
+/* Estilo do total do carrinho */
+.cart-total {
+    display: flex;
+    justify-content: space-around;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 20px 0;
+    border-top: 1px solid #ddd;
+}
+
+/* Estilo do botão de finalizar compra */
+.checkout-btn-container {
+    text-align: center;
+}
+
+.checkout-btn {
+    position: relative;
+  display: inline-block;
+  background: linear-gradient(to bottom, #1b1c3f, #4a4e91);
+ /* Gradient background */
+  color: white;
+ /* White text color */
+  font-family: "Segoe UI", sans-serif;
+ /* Stylish and legible font */
+  font-weight: bold;
+  font-size: 18px;
+ /* Large font size */
+  border: none;
+ /* No border */
+  border-radius: 30px;
+ /* Rounded corners */
+  padding: 14px 28px;
+ /* Large padding */
+  cursor: pointer;
+ /* Cursor on hover */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+ /* Subtle shadow */
+  animation: button-shimmer 2s infinite;
+  transition: all 0.3s ease-in-out;
+ /* Smooth transition */
+}
+
+.checkout-btn:hover {
+    background: linear-gradient(to bottom, #2c2f63, #5b67b7);
+    animation: button-particles 1s ease-in-out infinite;
+    transform: translateY(-2px);
+}
+

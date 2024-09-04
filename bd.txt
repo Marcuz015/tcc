@@ -1,0 +1,10 @@
+*usuario*
+CREATE TABLE usuario (
+    id INT UNIQUE,
+    nome VARCHAR PRIMARY KEY,
+    email VARCHAR,
+    senha VARCHAR,
+    foto CHARACTER
+);
+
+*produtos*

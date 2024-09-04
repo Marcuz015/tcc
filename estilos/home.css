@@ -1,0 +1,40 @@
+body {
+  background-image: url('./assets/decorative-rough-grungy-paint-dirt.jpg');
+  background-size: contain; /* Ajusta o tamanho da imagem para se ajustar dentro do contêiner */
+  background-position: center; /* Centraliza a imagem */
+  background-repeat: no-repeat; /* Evita a repetição da imagem */
+  height: 100vh; /* Garante que a altura da página cubra a tela inteira */
+  margin: 0; /* Remove a margem padrão do body */
+}
+
+.centralize {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ajusta a altura para garantir centralização completa */
+  min-height: 100vh; /* Garante que a altura mínima seja a altura da tela */
+}
+
+.shadow__btn {
+  background-color: rgb(1, 219, 1); 
+  letter-spacing: 2px;
+  padding: 10px 20px; /* Adiciona preenchimento ao botão */
+  cursor: pointer; /* Muda o cursor ao passar sobre o botão */
+}
+
+.shadow__btn:hover {
+  background-color: rgb(0, 0, 0); 
+  letter-spacing: 2px;
+  padding: 10px 20px; /* Adiciona preenchimento ao botão */
+  cursor: pointer; /* Muda o cursor ao passar sobre o botão */
+}img {
+  max-width: 150px; /* Define o tamanho máximo da imagem */
+  height: auto; /* Mantém a proporção da imagem */
+  margin-bottom: 16px; /* Espaço entre a imagem e o botão */
+}
+
+
+.link {
+  text-decoration: none; /* Remove sublinhado dos links */
+  color: inherit; /* Herda a cor do botão */
+}

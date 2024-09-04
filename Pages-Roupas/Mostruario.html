@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mostruario</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../estilos/tailwind.css">
+    <!-- CSS -->
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Icons -->
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Freeman&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="container">
+        <ul class="navbar">
+            <li class="links-navbar"><a href="../index.html"><i class="bi bi-house"></i></a></li>
+            <li class="links-navbar"><a href="#"><i class="bi bi-cart3"></i></a></li>
+            <li class="links-navbar"><a href="../pages/about.html"><i class="bi bi-pencil"></i></a></li>
+            <li class="links-navbar"><a href="../pages/perfil.html"><i class="bi bi-person"></i></a></li>
+        </ul>
+    </div>
+    <!-- NAVBAR -->
+
+    <!-- HEADER -->
+    <header class="mt-72 w-full h-[320px]">
+        <div class="w-full h-full flex flex-col justify-center items-center">
+            <img class="shadow-lg w-40 h-40 rounded-full hover:scale-110 duration-300" src="../assets/logo.jpeg" alt="Logo da empresa">
+            <h1 class="text-3xl font-bold mb-2 mt-4 text-white">Street Drill</h1>
+        </div>
+    </header>
+    <!-- FIM HEADER -->
+
+    <!-- Carrinho -->
+    <h1 class="text-4xl font-bold items-center text-center mt-4">Seu carrinho</h1>
+
+    <!-- Contêiner do Carrinho -->
+    <div class="cart-container" id="cart-container">
+        <!-- Os itens do carrinho serão adicionados aqui pelo script -->
+    </div>
+
+    <!-- Total -->
+    <div class="cart-total">
+        <p>Total:</p>
+        <p class="total-price">R$ 0,00</p>
+    </div>
+
+    <!-- Botão Finalizar Compra -->
+    <div class="checkout-btn-container">
+        <button class="checkout-btn">Finalizar Compra</button>
+    </div>
+
+    <script>
+        function loadCart() {
+            const cartContainer = document.getElementById('cart-container');
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let total = 0;
+
+            cart.forEach(item => {
+                // Supondo que o nome e o preço estão formatados adequadamente
+                const itemHTML = `
+                    <div class="cart-item">
+                        <div class="item-info">
+                            <img src="../assets/Roupas/Camiseta2.jpeg" alt="${item.name}" class="product-image"> <!-- Coloque a imagem correta -->
+                            <div>
+                                <h2 class="item-title">${item.name}</h2>
+                                <p class="item-description">Descrição breve do produto.</p>
+                            </div>
+                        </div>
+                        <div class="item-price">
+                            <p class="price">${item.price.toFixed(2).replace('.', ',')}</p>
+                            <button class="remove-btn">Remover</button>
+                        </div>
+                    </div>
+                `;
+
+                cartContainer.innerHTML += itemHTML;
+                total += item.price;
+            });
+
+            document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', loadCart);
+
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('remove-btn')) {
+                const item = event.target.closest('.cart-item');
+                const itemTitle = item.querySelector('.item-title').innerText;
+                removeItemFromCart(itemTitle);
+                item.remove();
+                updateTotal();
+            }
+        });
+
+        function removeItemFromCart(name) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart = cart.filter(item => item.name !== name);
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        function updateTotal() {
+            let total = 0;
+            document.querySelectorAll('.cart-item').forEach(item => {
+                const priceText = item.querySelector('.price').innerText;
+                const price = parseFloat(priceText.replace('R$', '').replace(',', '.'));
+                total += price;
+            });
+            document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+    </script>
+
+</body>
+</html>
