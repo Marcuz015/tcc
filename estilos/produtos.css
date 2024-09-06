@@ -24,6 +24,11 @@ h1 {
     font-family: "Yatra One", system-ui;
 }
 
+.carousel-image.hidden {
+  display: none;
+}
+
+
 .spanLoja {
     font-family: "Roboto", sans-serif;
 }
