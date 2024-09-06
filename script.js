@@ -87,12 +87,18 @@ function iniciarCarrossel() {
 
         setInterval(() => {
             imagens.forEach((img, i) => {
-                img.classList.toggle('hidden', i !== index);
+                img.classList.remove('hidden');
+                if (i !== index) {
+                    img.style.opacity = 0;
+                } else {
+                    img.style.opacity = 1;
+                }
             });
             index = (index + 1) % imagens.length;
         }, 3000); // Tempo do carrossel (3 segundos)
     });
 }
+
 
 // Chama a função para renderizar os produtos ao carregar a página
 document.addEventListener('DOMContentLoaded', renderizarProdutos);
