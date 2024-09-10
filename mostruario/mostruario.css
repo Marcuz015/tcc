@@ -24,6 +24,7 @@ h1 {
     font-family: "Yatra One", system-ui;
 }
 
+
 .container {
     display: flex;
     justify-content: center;
@@ -54,4 +55,8 @@ h1 {
   
   .links-navbar a:hover {
     color: #46b83d;
+  }
+
+  button{ 
+    font-family: "Freeman", sans-serif;
   }
