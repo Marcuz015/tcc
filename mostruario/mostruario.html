@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,12 +37,11 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-
 </head>
+
 <body>
     <!-- NAVBAR -->
-    <div class="container style"
-    style="max-width: 100%;">
+    <div class="container style" style="max-width: 100%;">
         <ul class="navbar">
             <li class="links-navbar"><a href="../index.html"><i class="bi bi-house"></i></a></li>
             <li class="links-navbar"><a href="../pages/carrinho.html"><i class="bi bi-cart3"></i></a></li>
@@ -53,11 +53,22 @@
 
     <!-- Mostruario -->
     <!--Nome camiseta-->
-    <h1 id="productName" class="text-center text-2xl font-bold mt-4">Camiseta Street-Joker</h1>
+    <h1 id="productName" class="ml-2 text-2xl font-bold mt-4">Camiseta Street-Joker</h1>
     <!--Nome camiseta-->
 
+    <div>
+        <span id="valor" class="font-bold mt-2 ml-2 text-2xl"></span>
+        <p class=""></p>
+    </div>
+    
     <!-- Carrossel com sombra sutil e margens ajustadas -->
     <div id="carouselExample" class="carousel slide p-2 mx-auto max-w-4xl" data-bs-ride="carousel">
+        <!-- Indicadores de fotos -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        </div>
+
         <div class="carousel-inner rounded-lg">
             <div class="carousel-item active">
                 <img src="../assets/Roupas/Camiseta1.jpeg" class="d-block w-full object-cover" alt="Frente da Camiseta">
@@ -66,6 +77,7 @@
                 <img src="../assets/Costas/Camiseta1C.jpeg" class="d-block w-full object-cover" alt="Costas da Camiseta">
             </div>
         </div>
+
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
@@ -81,24 +93,25 @@
     <div class="mt-4 text-center">
         <span class="text-lg font-bold">Tamanhos: </span>
         <div class="inline-flex space-x-2">
-            <button class="px-3 py-2 ml-2 bg-black text-white rounded-2xl ">P</button>
-            <button class="px-3 py-2 ml-2 bg-black text-white rounded-2xl ">M</button>
-            <button class="px-3 py-2 ml-2 bg-black text-white rounded-2xl ">G</button>
-            <button class="px-3 py-2 ml-2 bg-black text-white rounded-2xl ">GG</button>
+            <button class="px-3 py-2 ml-2 border text-black font-semibold rounded-2xl">P</button>
+            <button class="px-3 py-2 ml-2 border text-black font-semibold rounded-2xl">M</button>
+            <button class="px-3 py-2 ml-2 border text-black font-semibold rounded-2xl">G</button>
+            <button class="px-3 py-2 ml-2 border text-black font-semibold rounded-2xl">GG</button>
         </div>
     </div>
     <!-- Botões de numeração -->
 
-<!-- BOTÃO COMPRAS E CARRINHO -->
-<div class="Botoes flex justify-center">
-    <button class="text-black bg-transparent px-3 py-2 text-2xl rounded-full mt-3 border-2 border-black font-bold ml-2 hover:bg-black hover:text-white">
-        Comprar
-    </button>
-    <button class="text-black bg-transparent px-3 py-2 text-2xl rounded-full mt-3 border-2 border-black font-bold ml-2 hover:bg-black hover:text-white">
-        Carrinho
-    </button>
-</div>
-
+    <!-- BOTÃO COMPRAS E CARRINHO -->
+    <div class="Botoes flex justify-center mt-4">
+        <button class="button ml-2">
+            <p class="text mt-2">Comprar</p>
+        </button>
+        
+        <button class="button ml-2 ">
+            <p class="text mt-2">Carrinho</p>
+        </button>
+    </div>
 
 </body>
+
 </html>

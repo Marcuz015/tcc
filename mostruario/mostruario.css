@@ -60,3 +60,40 @@ h1 {
   button{ 
     font-family: "Freeman", sans-serif;
   }
+
+  /* From Uiverse.io by kamehame-ha */ 
+.button {
+  display: flex;
+  height: 55px;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 15px;
+  gap: 15px;
+  background-color: #181717;
+  outline: 3px #181717 solid;
+  outline-offset: -3px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: 400ms;
+}
+
+.button .text {
+  color: white;
+  font-weight: 700;
+  font-size: 1em;
+  transition: 400ms;
+  
+}
+
+.button svg path {
+  transition: 400ms;
+}
+
+.button:hover {
+  background-color: transparent;
+}
+
+.button:hover .text {
+  color: #181717;
+}
