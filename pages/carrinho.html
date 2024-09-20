@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mostruario</title>
+    <title>Carrinho</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="../estilos/style.css">
     <link rel="stylesheet" href="../estilos/tailwind.css">
-    <!-- CSS -->
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- Icons -->
 
     <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,27 +66,28 @@
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             let total = 0;
 
-            cart.forEach(item => {
-                // Supondo que o nome e o preço estão formatados adequadamente
-                const itemHTML = `
-                    <div class="cart-item">
-                        <div class="item-info">
-                            <img src=".${item.imgFrente}" alt="${item.name}" class="product-image"> <!-- Coloque a imagem correta -->
-                            <div>
-                                <h2 class="item-title">${item.name}</h2>
-                                <p class="item-description">Descrição breve do produto.</p>
-                            </div>
-                        </div>
-                        <div class="item-price">
-                            <p class="price">${item.price.toFixed(2).replace('.', ',')}</p>
-                            <button class="remove-btn">Remover</button>
-                        </div>
-                    </div>
-                `;
+            cartContainer.innerHTML = ''; // Limpa o conteúdo anterior
 
-                cartContainer.innerHTML += itemHTML;
-                total += item.price;
-            });
+            cart.forEach(item => {
+    console.log(item.fotoFrente); // Verifica o caminho da imagem
+    const itemHTML = `
+        <div class="cart-item flex justify-between items-center border-b py-2">
+            <div class="item-info flex items-center">
+                <img src="${item.fotoFrente}" alt="${item.name}" class="product-image w-20 h-20 rounded-md mr-4">
+                <div>
+                    <h2 class="item-title">${item.name}</h2>
+                    <p class="item-description">Descrição breve do produto.</p>
+                </div>
+            </div>
+            <div class="item-price flex items-center">
+                <p class="price">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
+                <button class="remove-btn ml-4 bg-red-500 text-white px-2 py-1 rounded">Remover</button>
+            </div>
+        </div>
+    `;
+    cartContainer.innerHTML += itemHTML;
+    total += item.price;
+});
 
             document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
         }

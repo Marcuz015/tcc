@@ -5,62 +5,188 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Street Drill</title>
 
-    <!-- FAVICON -->
-    <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
-    <!-- FAVICON -->
-
     <!-- CSS -->
-    <link rel="stylesheet" href="./estilos/tailwind.css">
-    <link rel="stylesheet" href="./estilos/produtos.css">
-    <!-- CSS -->
+    <link rel="stylesheet" href="../estilos/tailwind.css">
+    <link rel="stylesheet" href="../estilos/produtos.css">
 
     <!-- FONTES -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Freeman&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Yatra+One&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    <!-- FONTES -->
+    <link href="https://fonts.googleapis.com/css2?family=Freeman&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 
     <!-- ICONS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- ICONS -->
 
-    <!-- SRC -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="./script.js" defer></script>
-    <!-- SRC -->
-
+    <!-- Parse SDK -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/3.4.4/parse.min.js"></script>
 </head>
 <body>
-
     <!-- NAVBAR -->
     <div class="container">
         <ul class="navbar">
-            <li class="links-navbar"><a href="./index.html"><i class="bi bi-house"></i></a></li>
-            <li class="links-navbar"><a href="./pages/carrinho.html"><i class="bi bi-cart3"></i></a></li>
-            <li class="links-navbar"><a href="./pages/about.html"><i class="bi bi-pencil"></i></a></li>
-            <li class="links-navbar"><a href="./pages/perfil.html"><i class="bi bi-person"></i></a></li>
+            <li class="links-navbar"><a href="../index.html"><i class="bi bi-house"></i></a></li>
+            <li class="links-navbar"><a href="/pages/carrinho.html"><i class="bi bi-cart3"></i></a></li>
+            <li class="links-navbar"><a href="../pages/about.html"><i class="bi bi-pencil"></i></a></li>
+            <li class="links-navbar"><a href="../pages/perfil.html"><i class="bi bi-person"></i></a></li>
         </ul>
     </div>
     <!-- NAVBAR -->
 
-    <!-- HEADER -->
+    <!-- HEADER --> 
     <header class="mt-72 w-full h-[320px]">
         <div class="w-full h-full flex flex-col justify-center items-center">
-            <img class="shadow-lg w-40 h-40 rounded-full hover:scale-110 duration-300" src="./assets/logo.jpeg" alt="Logo da empresa">
+            <img class="shadow-lg w-40 h-40 rounded-full hover:scale-110 duration-300" src="../assets/logo.jpeg" alt="Logo da empresa">
             <h1 class="text-3xl font-bold mb-2 mt-4 text-white">Street Drill</h1>
         </div>
     </header>
-    <!-- FIM HEADER -->
+    <!-- FIM HEADER --> 
 
-    <h2 class="text-4xl md:text-5xl font-bold mt-4 items-center justify-center text-center">Nossas roupas</h2>
+    <h2 class="text-4xl md:text-5xl font-bold mt-4 text-center">Nossas roupas</h2>
 
     <!-- PRODUTOS -->
-    <div id="menu" class="mx-auto max-w-7xl">
-        <!-- Os produtos serão renderizados aqui pelo script -->
+    <div id="menu">
+        <main class="grid grid-cols-1 md:grid-cols-2 gap-7 mx-auto max-w-7xl">
+            <!-- Os produtos serão renderizados aqui via JavaScript -->
+        </main>
     </div>
     <!-- FIM PRODUTOS -->
 
+    <!-- CARRINHO MODAL -->
+    <div id="cart-modal" class="bg-black/50 w-full h-full fixed top-0 left-0 z-[99] hidden items-center justify-center">
+        <div class="bg-white p-5 rounded-md min-w-[90%] md:min-w-[600px]">
+            <h2 class="text-center mb-2 font-bold text-2xl">MEU CARRINHO</h2>
+            <div id="cart-items" class="flex justify-between mb-2 flex-col"></div>
+            <p class="font-bold ml-2">TOTAL: <span id="cart-total">0.00</span></p>
+            <p class="font-bold ml-2 mt-4">Endereço de entrega:</p>
+            <input type="text" placeholder="Digite seu endereço completo..." id="address" class="w-full border-2 p-1 rounded-xl my-1">
+            <p id="address-warn" class="text-red-600 ml-2 hidden">Digite seu endereço completo!</p>
+            <div class="flex justify-between mt-4 w-full">
+                <button id="close-modal-btn" class="bg-red-500 text-white px-4 py-1 rounded">Fechar carrinho</button>
+                <button id="checkout-btn" class="bg-green-500 text-white px-4 py-1 rounded">Finalizar compra</button>
+            </div>
+        </div>
+    </div>
+    <!-- FIM CARRINHO MODAL -->
+
+    <!-- FOOTER CARRINHO -->
+    <footer class="w-full bg-green-700 py-2 fixed bottom-0 z-40 text-center">
+        <button id="cart-btn-footer" class="font-bold text-white flex items-center justify-center gap-2">
+            (<span id="cart-count">0</span>) veja meu carrinho
+            <i class="bi bi-cart-plus text-lg"></i>
+        </button>
+    </footer>
+    <!-- FIM FOOTER CARRINHO -->
+
+    <script>
+        // Inicializa o Parse SDK com suas credenciais
+        Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB1b7vlkFPdG9OgZFCLhpvz7");
+        Parse.serverURL = 'https://parseapi.back4app.com/';
+
+        let cart = [];
+
+        // Função para buscar produtos do banco de dados "Camisetas" e renderizá-los
+        async function fetchAndRenderProducts() {
+            const Camisetas = Parse.Object.extend("Camisetas");
+            const query = new Parse.Query(Camisetas);
+
+            try {
+                const results = await query.find();
+                const productContainer = document.querySelector('#menu main');
+                productContainer.innerHTML = ''; // Limpa o conteúdo anterior
+
+                if (results.length === 0) {
+                    productContainer.innerHTML = '<p>Nenhum produto encontrado.</p>';
+                } else {
+                    results.forEach((produto) => {
+                        const nome = produto.get("nome");
+                        const preco = produto.get("preco");
+                        const fotoFrenteFile = produto.get("fotoFrente");
+
+                        if (!nome || !preco || !fotoFrenteFile) {
+                            console.error('Produto incompleto:', produto);
+                            return;
+                        }
+
+                        const fotoFrenteUrl = fotoFrenteFile instanceof Parse.File ? fotoFrenteFile.url() : fotoFrenteFile;
+
+                        const productHtml = `
+                            <div class="flex gap-2 border p-4 rounded-lg">
+                                <img class="w-52 h-52 md:w-80 md:h-80 rounded-2xl bg-cover" src="${fotoFrenteUrl}" alt="${nome}">
+                                <div class="ml-3">
+                                    <p class="font-bold md:text-3xl text-xl">${nome}</p>
+                                    <p class="text-lg">Coleção Exclusiva</p>
+                                    <p class="font-bold text-lg">R$ ${preco.toFixed(2)}</p>
+                                    <button class="bg-gray-950 text-white px-5 rounded-lg mt-3 add-to-cart" data-name="${nome}" data-price="${preco}" data-foto="${fotoFrenteUrl}">
+                                        <i class="bi bi-cart-plus text-lg"></i> Adicionar ao carrinho
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+
+                        productContainer.innerHTML += productHtml;
+                    });
+                }
+            } catch (error) {
+                console.error('Erro ao buscar produtos:', error);
+            }
+        }
+
+        // Função para atualizar o carrinho na interface
+        function updateCartUI() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartCount = document.getElementById('cart-count');
+            const cartTotal = document.getElementById('cart-total');
+
+            cartItemsContainer.innerHTML = ''; // Limpa os itens do carrinho
+            let total = 0;
+
+            cart.forEach(item => {
+                const cartItemHtml = `
+                    <div class="flex justify-between">
+                        <span>${item.name}</span>
+                        <span>R$ ${item.price.toFixed(2)}</span>
+                    </div>
+                `;
+                cartItemsContainer.innerHTML += cartItemHtml;
+                total += item.price;
+            });
+
+            cartCount.textContent = cart.length;
+            cartTotal.textContent = total.toFixed(2);
+        }
+
+        // Função para adicionar produto ao carrinho
+        function addToCart(name, price, fotoFrenteUrl) {
+            const item = { name, price, fotoFrente: fotoFrenteUrl };
+            cart.push(item);
+            localStorage.setItem('cart', JSON.stringify(cart)); // Salva o carrinho no localStorage
+            updateCartUI();
+
+            // Redireciona para a página do carrinho
+            window.location.href = '../pages/carrinho.html';
+        }
+
+        // Evento de clique para adicionar produtos ao carrinho
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('add-to-cart')) {
+                const name = event.target.getAttribute('data-name');
+                const price = parseFloat(event.target.getAttribute('data-price'));
+                const fotoFrenteUrl = event.target.getAttribute('data-foto');
+                addToCart(name, price, fotoFrenteUrl);
+            }
+        });
+
+        // Chame a função quando a página carregar
+        document.addEventListener('DOMContentLoaded', fetchAndRenderProducts);
+
+        // Eventos para abrir e fechar o modal do carrinho
+        document.getElementById('cart-btn-footer').addEventListener('click', function() {
+            document.getElementById('cart-modal').classList.remove('hidden');
+        });
+
+        document.getElementById('close-modal-btn').addEventListener('click', function() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        });
+    </script>
 </body>
 </html>
