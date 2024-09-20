@@ -61,39 +61,56 @@
     </div>
 
     <script>
+        
+        // Função para adicionar item ao carrinho
+        function addToCart(item) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            const existingItem = cart.find(cartItem => cartItem.name === item.name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...item, quantity: 3 }); // Inicia com quantidade 1
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            reloadCartUI();
+        }
+        
         function loadCart() {
             const cartContainer = document.getElementById('cart-container');
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             let total = 0;
-
-            cartContainer.innerHTML = ''; // Limpa o conteúdo anterior
-
+    
             cart.forEach(item => {
-    console.log(item.fotoFrente); // Verifica o caminho da imagem
-    const itemHTML = `
-        <div class="cart-item flex justify-between items-center border-b py-2">
-            <div class="item-info flex items-center">
-                <img src="${item.fotoFrente}" alt="${item.name}" class="product-image w-20 h-20 rounded-md mr-4">
-                <div>
-                    <h2 class="item-title">${item.name}</h2>
-                    <p class="item-description">Descrição breve do produto.</p>
-                </div>
-            </div>
-            <div class="item-price flex items-center">
-                <p class="price">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
-                <button class="remove-btn ml-4 bg-red-500 text-white px-2 py-1 rounded">Remover</button>
-            </div>
-        </div>
-    `;
-    cartContainer.innerHTML += itemHTML;
-    total += item.price;
-});
-
+                const itemHTML = `
+                    <div class="cart-item flex justify-between items-center border-b py-2">
+                        <div class="item-info flex items-center">
+                            <img src="${item.fotoFrente}" alt="${item.name}" class="product-image w-20 h-20 rounded-md mr-4">
+                            <div>
+                                <h2 class="item-title">${item.name}</h2>
+                                <p>Quantidade: <span class="item-quantity">${item.quantity}</span></p>
+                            </div>
+                        </div>
+                        <div class="item-price flex items-center">
+                            <p class="price">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</p>
+                            <button class="remove-btn ml-4 bg-red-500 text-white px-2 py-1 rounded">Remover</button>
+                            <div class="quantity-control ml-4">
+                                <button class="decrease-qty bg-gray-300 px-2 py-1 rounded">-</button>
+                                <button class="increase-qty bg-gray-300 px-2 py-1 rounded">+</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                cartContainer.innerHTML += itemHTML;
+                total += item.price * item.quantity;
+            });
+    
             document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
         }
-
+    
         document.addEventListener('DOMContentLoaded', loadCart);
-
+    
         document.addEventListener('click', function(event) {
             if (event.target.classList.contains('remove-btn')) {
                 const item = event.target.closest('.cart-item');
@@ -102,14 +119,47 @@
                 item.remove();
                 updateTotal();
             }
+    
+            if (event.target.classList.contains('increase-qty')) {
+                const item = event.target.closest('.cart-item');
+                const itemTitle = item.querySelector('.item-title').innerText;
+                updateItemQuantity(itemTitle, 1);
+            }
+    
+            if (event.target.classList.contains('decrease-qty')) {
+                const item = event.target.closest('.cart-item');
+                const itemTitle = item.querySelector('.item-title').innerText;
+                updateItemQuantity(itemTitle, -1);
+            }
         });
-
+    
         function removeItemFromCart(name) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             cart = cart.filter(item => item.name !== name);
             localStorage.setItem('cart', JSON.stringify(cart));
         }
-
+    
+        function updateItemQuantity(name, change) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart = cart.map(item => {
+                if (item.name === name) {
+                    item.quantity += change;
+                    // Certifique-se de que a quantidade nunca seja menor que 1
+                    if (item.quantity < 1) {
+                        item.quantity = 1;
+                    }
+                }
+                return item;
+            });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            reloadCartUI();
+        }
+    
+        function reloadCartUI() {
+            document.getElementById('cart-container').innerHTML = '';
+            loadCart();
+        }
+    
         function updateTotal() {
             let total = 0;
             document.querySelectorAll('.cart-item').forEach(item => {
