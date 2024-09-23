@@ -133,13 +133,17 @@
 
         // Função para adicionar produto ao carrinho
         function addToCart(name, price, fotoFrenteUrl) {
-            const item = { name, price, fotoFrente: fotoFrenteUrl };
-            cart.push(item);
-            localStorage.setItem('cart', JSON.stringify(cart)); // Salva o carrinho no localStorage
-            updateCartUI();
+            
+        // Exibe o alerta ao adicionar a camisa ao carrinho
+        alert("Camisa adicionada ao carrinho");
+        
+        const item = { name, price, fotoFrente: fotoFrenteUrl };
+        cart.push(item);
+        localStorage.setItem('cart', JSON.stringify(cart)); // Salva o carrinho no localStorage
+        updateCartUI();
 
-            // Redireciona para a página do carrinho
-            window.location.href = '../pages/carrinho.html';
+        // Redireciona para a página do carrinho
+        window.location.href = '../pages/carrinho.html';
         }
 
         // Evento de clique para adicionar produtos ao carrinho

@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Freeman&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -61,27 +61,21 @@
     </div>
 
     <script>
-        
         // Função para adicionar item ao carrinho
         function addToCart(item) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            
-            const existingItem = cart.find(cartItem => cartItem.name === item.name);
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({ ...item, quantity: 3 }); // Inicia com quantidade 1
-            }
-            
+            cart.push(item);  // Sempre adiciona o item, sem verificar duplicação
             localStorage.setItem('cart', JSON.stringify(cart));
             reloadCartUI();
         }
-        
+
+        // Carrega os itens do carrinho e exibe na interface
         function loadCart() {
             const cartContainer = document.getElementById('cart-container');
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            let total = 0;
-    
+            cartContainer.innerHTML = '';  // Limpa a interface do carrinho antes de recarregar
+            let total = 3;
+
             cart.forEach(item => {
                 const itemHTML = `
                     <div class="cart-item flex justify-between items-center border-b py-2">
@@ -89,28 +83,25 @@
                             <img src="${item.fotoFrente}" alt="${item.name}" class="product-image w-20 h-20 rounded-md mr-4">
                             <div>
                                 <h2 class="item-title">${item.name}</h2>
-                                <p>Quantidade: <span class="item-quantity">${item.quantity}</span></p>
                             </div>
                         </div>
                         <div class="item-price flex items-center">
-                            <p class="price">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</p>
+                            <p class="price">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
                             <button class="remove-btn ml-4 bg-red-500 text-white px-2 py-1 rounded">Remover</button>
-                            <div class="quantity-control ml-4">
-                                <button class="decrease-qty bg-gray-300 px-2 py-1 rounded">-</button>
-                                <button class="increase-qty bg-gray-300 px-2 py-1 rounded">+</button>
-                            </div>
                         </div>
                     </div>
                 `;
                 cartContainer.innerHTML += itemHTML;
-                total += item.price * item.quantity;
+                total += item.price;
             });
-    
+
             document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
         }
-    
+
+        // Carrega o carrinho quando a página for carregada
         document.addEventListener('DOMContentLoaded', loadCart);
-    
+
+        // Manipula os eventos de clique para remover itens do carrinho
         document.addEventListener('click', function(event) {
             if (event.target.classList.contains('remove-btn')) {
                 const item = event.target.closest('.cart-item');
@@ -119,47 +110,23 @@
                 item.remove();
                 updateTotal();
             }
-    
-            if (event.target.classList.contains('increase-qty')) {
-                const item = event.target.closest('.cart-item');
-                const itemTitle = item.querySelector('.item-title').innerText;
-                updateItemQuantity(itemTitle, 1);
-            }
-    
-            if (event.target.classList.contains('decrease-qty')) {
-                const item = event.target.closest('.cart-item');
-                const itemTitle = item.querySelector('.item-title').innerText;
-                updateItemQuantity(itemTitle, -1);
-            }
         });
-    
-        function removeItemFromCart(name) {
+
+        // Remove o item do carrinho
+        function removeItemFromCart(nameAndAttributes) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart = cart.filter(item => item.name !== name);
-            localStorage.setItem('cart', JSON.stringify(cart));
-        }
-    
-        function updateItemQuantity(name, change) {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart = cart.map(item => {
-                if (item.name === name) {
-                    item.quantity += change;
-                    // Certifique-se de que a quantidade nunca seja menor que 1
-                    if (item.quantity < 1) {
-                        item.quantity = 1;
-                    }
-                }
-                return item;
-            });
+            cart = cart.filter(item => `${item.name}` !== nameAndAttributes);
             localStorage.setItem('cart', JSON.stringify(cart));
             reloadCartUI();
         }
-    
+
+        // Recarrega a interface do carrinho
         function reloadCartUI() {
             document.getElementById('cart-container').innerHTML = '';
             loadCart();
         }
-    
+
+        // Atualiza o valor total do carrinho
         function updateTotal() {
             let total = 0;
             document.querySelectorAll('.cart-item').forEach(item => {
