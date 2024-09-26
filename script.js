@@ -130,3 +130,5 @@ function addToCart(name, price, imgFrente) {
     // Exibe uma mensagem
     Swal.fire("Produto adicionado ao carrinho!");
 }
+
+
