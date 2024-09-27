@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Street Drill</title>
 
+    <!-- FAVICON -->
+    <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+    <!-- FAVICON -->
+
     <!-- CSS -->
     <link rel="stylesheet" href="estilos/tailwind.css">
     <link rel="stylesheet" href="estilos/produtos.css">
@@ -19,8 +23,15 @@
 
     <!-- Parse SDK -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/3.4.4/parse.min.js"></script>
+
 </head>
 <body>
+    <!-- Loader -->
+    <div id="loading">
+        <div class="spinner"></div>
+    </div>
+    <!-- FIM Loader -->
+
     <!-- NAVBAR -->
     <div class="container">
         <ul class="navbar">
@@ -51,8 +62,6 @@
     </div>
     <!-- FIM PRODUTOS -->
 
-    
-
     <script>
         // Inicializa o Parse SDK com suas credenciais
         Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB1b7vlkFPdG9OgZFCLhpvz7");
@@ -60,12 +69,15 @@
 
         let cart = [];
 
-        // Função para buscar produtos do banco de dados "Camisetas" e renderizá-los
+        // Função para buscar produtos e controlar o loader
         async function fetchAndRenderProducts() {
             const Camisetas = Parse.Object.extend("Camisetas");
             const query = new Parse.Query(Camisetas);
 
             try {
+                // Exibe o loader antes de buscar produtos
+                document.getElementById('loading').style.display = 'flex';
+
                 const results = await query.find();
                 const productContainer = document.querySelector('#menu main');
                 productContainer.innerHTML = ''; // Limpa o conteúdo anterior
@@ -86,64 +98,38 @@
                         const fotoFrenteUrl = fotoFrenteFile instanceof Parse.File ? fotoFrenteFile.url() : fotoFrenteFile;
 
                         const productHtml = `
-                            <div class="flex gap-2 border p-4 rounded-lg">
-                                <img class="w-52 h-52 md:w-80 md:h-80 rounded-2xl bg-cover" src="${fotoFrenteUrl}" alt="${nome}">
+                        <div class="flex gap-2 p-4 rounded-lg ml-4">
+                                <a href="mostruario/mostruario.html">
+                                    <img class="w-52 h-52 md:w-80 md:h-80 rounded-2xl bg-cover" src="${fotoFrenteUrl}" alt="${nome}">
+                                </a>
                                 <div class="ml-3">
                                     <p class="font-bold md:text-3xl text-xl">${nome}</p>
                                     <p class="text-lg">Coleção Exclusiva</p>
                                     <p class="font-bold text-lg">R$ ${preco.toFixed(2)}</p>
                                     <button class="bg-gray-950 text-white px-5 rounded-lg mt-3 add-to-cart" data-name="${nome}" data-price="${preco}" data-foto="${fotoFrenteUrl}">
-                                        <i class="bi bi-cart-plus text-lg"></i> Adicionar ao carrinho
+                                        <i class="bi bi-cart-plus text-lg"></i>
                                     </button>
                                 </div>
                             </div>
                         `;
-
                         productContainer.innerHTML += productHtml;
                     });
                 }
+
+                // Oculta o loader após renderizar os produtos
+                document.getElementById('loading').style.display = 'none';
             } catch (error) {
                 console.error('Erro ao buscar produtos:', error);
+                document.getElementById('loading').style.display = 'none'; // Oculta o loader em caso de erro
             }
-        }
-
-        // Função para atualizar o carrinho na interface
-        function updateCartUI() {
-            const cartItemsContainer = document.getElementById('cart-items');
-            const cartCount = document.getElementById('cart-count');
-            const cartTotal = document.getElementById('cart-total');
-
-            cartItemsContainer.innerHTML = ''; // Limpa os itens do carrinho
-            let total = 0;
-
-            cart.forEach(item => {
-                const cartItemHtml = `
-                    <div class="flex justify-between">
-                        <span>${item.name}</span>
-                        <span>R$ ${item.price.toFixed(2)}</span>
-                    </div>
-                `;
-                cartItemsContainer.innerHTML += cartItemHtml;
-                total += item.price;
-            });
-
-            cartCount.textContent = cart.length;
-            cartTotal.textContent = total.toFixed(2);
         }
 
         // Função para adicionar produto ao carrinho
         function addToCart(name, price, fotoFrenteUrl) {
-            
-        // Exibe o alerta ao adicionar a camisa ao carrinho
-        alert("Camisa adicionada ao carrinho");
-        
-        const item = { name, price, fotoFrente: fotoFrenteUrl };
-        cart.push(item);
-        localStorage.setItem('cart', JSON.stringify(cart)); // Salva o carrinho no localStorage
-        updateCartUI();
-
-        // Redireciona para a página do carrinho
-        window.location.href = '../pages/carrinho.html';
+            alert("Camisa adicionada ao carrinho");
+            const item = { name, price, fotoFrente: fotoFrenteUrl };
+            cart.push(item);
+            localStorage.setItem('cart', JSON.stringify(cart)); // Salva o carrinho no localStorage
         }
 
         // Evento de clique para adicionar produtos ao carrinho
@@ -156,17 +142,8 @@
             }
         });
 
-        // Chame a função quando a página carregar
+        // Chama a função quando a página carregar
         document.addEventListener('DOMContentLoaded', fetchAndRenderProducts);
-
-        // Eventos para abrir e fechar o modal do carrinho
-        document.getElementById('cart-btn-footer').addEventListener('click', function() {
-            document.getElementById('cart-modal').classList.remove('hidden');
-        });
-
-        document.getElementById('close-modal-btn').addEventListener('click', function() {
-            document.getElementById('cart-modal').classList.add('hidden');
-        });
     </script>
 </body>
 </html>
