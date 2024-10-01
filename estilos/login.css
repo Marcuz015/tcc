@@ -67,10 +67,11 @@ body {
    }
    
    .btn-link {
-    color: #f5f5f5;
+    color: #46b83d;
     display: block;
     font-size: .75em;
     transition: color .3s ease-out;
+    font-size: 1rem;
    }
    
    /*Hover & focus*/
@@ -86,6 +87,6 @@ body {
    }
    
    .btn-link:hover {
-    color: #46b83d;
+    color: #fff;
    }
    
