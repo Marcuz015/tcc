@@ -72,14 +72,14 @@
             localStorage.setItem('cart', JSON.stringify(cart));
             reloadCartUI();
         }
-
+    
         // Carrega os itens do carrinho e exibe na interface
         function loadCart() {
             const cartContainer = document.getElementById('cart-container');
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             cartContainer.innerHTML = '';  // Limpa a interface do carrinho antes de recarregar
-            let total = 3;
-
+            let total = 0;
+    
             cart.forEach(item => {
                 const itemHTML = `
                     <div class="cart-item flex justify-between items-center border-b py-2">
@@ -98,13 +98,13 @@
                 cartContainer.innerHTML += itemHTML;
                 total += item.price;
             });
-
+    
             document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
         }
-
+    
         // Carrega o carrinho quando a página for carregada
         document.addEventListener('DOMContentLoaded', loadCart);
-
+    
         // Manipula os eventos de clique para remover itens do carrinho
         document.addEventListener('click', function(event) {
             if (event.target.classList.contains('remove-btn')) {
@@ -114,8 +114,13 @@
                 item.remove();
                 updateTotal();
             }
+    
+            // Evento para finalizar a compra
+            if (event.target.classList.contains('checkout-btn')) {
+                checkLoginAndProceed();
+            }
         });
-
+    
         // Remove o item do carrinho
         function removeItemFromCart(nameAndAttributes) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -123,13 +128,13 @@
             localStorage.setItem('cart', JSON.stringify(cart));
             reloadCartUI();
         }
-
+    
         // Recarrega a interface do carrinho
         function reloadCartUI() {
             document.getElementById('cart-container').innerHTML = '';
             loadCart();
         }
-
+    
         // Atualiza o valor total do carrinho
         function updateTotal() {
             let total = 0;
@@ -140,7 +145,23 @@
             });
             document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
         }
+    
+        // Função para verificar se o usuário está logado
+        async function checkLoginAndProceed() {
+            const currentUser = Parse.User.current();
+            if (!currentUser) {
+                alert("Você precisa estar logado para finalizar a compra.");
+                // Redirecionar para página de login, se necessário
+                // window.location.href = "login.html"; // descomente e ajuste a URL do login
+            } else {
+                // Prosseguir com a finalização da compra
+                // Aqui você pode redirecionar para uma página de checkout ou executar outra ação
+                alert("Compra finalizada com sucesso!"); // Exemplo de mensagem
+                // window.location.href = "checkout.html"; // descomente e ajuste a URL do checkout
+            }
+        }
     </script>
+    
 
 </body>
 </html>

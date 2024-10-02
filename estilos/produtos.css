@@ -1,6 +1,6 @@
 @tailwind base;
 @tailwind components;
-@tailwind utilities;  
+@tailwind utilities;
 
 body {
     background-color: #F8F8FF;
@@ -27,8 +27,7 @@ body {
   border-top: 8px solid #fff;
   border-left: 8px solid #fff;
   border-right: 8px solid #ff00;
-  animation: loader .7s infinite linear;
-  animation: spin 1.5s linear infinite;
+  animation: spin 1.5s linear infinite; /* Mantive apenas a animação de rotação */
 }
 
 /* Animação de giro */
@@ -59,7 +58,6 @@ h1 {
   display: none;
 }
 
-
 .spanLoja {
     font-family: "Roboto", sans-serif;
 }
@@ -70,33 +68,33 @@ h1 {
     align-items: center;
     height: 80px;
     background-color: #000000;
-    width: "100%";
-  }
+    width: 100%; /* Removi as aspas */
+}
   
-  .navbar {
+.navbar {
     display: flex;
     list-style: none;
     margin: 0;
     padding: 0;
     font-family: "Freeman", sans-serif;  
-  }
+}
   
-  .links-navbar {
+.links-navbar {
     margin: 0 16px;
     font-size: 24px;
     transition: color 0.3s ease-in-out;
-  }
+}
   
-  .links-navbar a {
+.links-navbar a {
     color: #fff;
     text-decoration: none;
-  }
+}
   
-  .links-navbar a:hover {
+.links-navbar a:hover {
     color: #46b83d;
-  }
+}
 
-  .carousel-container {
+.carousel-container {
     position: relative;
     overflow: hidden;
 }
@@ -111,12 +109,20 @@ h1 {
     transition: opacity 1s ease-in-out;
 }
 
-.carousel-image.hidden {
-    opacity: 0;
-}
-
 .menu {
   margin-top: 20px;
 }
 
-  
+.image-container {
+  position: relative;
+  width: 100%;
+  height: auto; /* Ajuste a altura conforme necessário */
+}
+
+.product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto; /* Ajuste a altura conforme necessário */
+}
