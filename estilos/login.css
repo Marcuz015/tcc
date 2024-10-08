@@ -1,3 +1,5 @@
+
+
 body {
     background-image: url("../assets/bgLogin.jpg");
     background-position: center;
@@ -13,8 +15,8 @@ body {
     padding: 1.9rem 1.2rem;
     text-align: center;
     background: #000000;
-    margin-top: 150px;
     border-radius: 20px;
+    margin-top: -80px;
    }
    
    /*Inputs*/
