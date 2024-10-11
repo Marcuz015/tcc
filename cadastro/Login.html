@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+
+    <form id="loginForm">
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="senha">Senha:</label><br>
+        <input type="password" id="senha" name="senha" required><br><br>
+
+        <button type="submit">Entrar</button>
+    </form>
+
+    <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+    <script>
+        // Inicializa o Parse
+        Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB1b7vlkFPdG9OgZFCLhpvz7"); // Substitua pelas suas credenciais do Back4App
+        Parse.serverURL = 'https://parseapi.back4app.com/';
+
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault(); // Previne o envio padrão do formulário
+
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+
+            if (!email || !senha) {
+                alert('Por favor, preencha todos os campos!');
+                return;
+            }
+
+            try {
+                console.log('Tentando logar com:', email);
+                const user = await Parse.User.logIn(email, senha);
+                alert('Login bem-sucedido! Bem-vindo, ' + user.get('nome'));
+                console.log('Usuário logado com sucesso:', user);
+                // Redirecionamento pós-login, se necessário
+                // window.location.href = 'pagina_inicial.html'; 
+            } catch (error) {
+                console.error('Erro ao logar:', error);
+                alert('Erro ao fazer login: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
