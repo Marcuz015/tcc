@@ -29,34 +29,42 @@
 
     <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
     <script>
-        // Inicializa o Parse
-        Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB1b7vlkFPdG9OgZFCLhpvz7"); // Substitua pelas suas credenciais do Back4App
+        // Inicializa o Parse com credenciais corretas
+        Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB1b7vlkFPdG9OgZFCLhpvz7");
         Parse.serverURL = 'https://parseapi.back4app.com/';
 
         document.getElementById('cadastroUsuarioForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
+            const username = document.getElementById('user').value;
             const nome = document.getElementById('nome').value;
             const sobrenome = document.getElementById('sobrenome').value;
             const email = document.getElementById('email').value;
             const senha = document.getElementById('senha').value;
-            const username = document.getElementById('email').value;
 
+            // Verificar se os campos estão preenchidos
             if (!nome || !sobrenome || !email || !senha || !username) {
                 alert('Por favor, preencha todos os campos!');
                 return;
             }
 
+            console.log("Iniciando cadastro...");
+            console.log("Username:", username);
+            console.log("Nome:", nome);
+            console.log("Sobrenome:", sobrenome);
+            console.log("Email:", email);
+
             // Criar o usuário usando Parse.User
             const user = new Parse.User();
-            user.set('username', username);  // Usar o email como username
+            user.set('username', username);  // Usar o valor do campo "Username"
             user.set('password', senha);
             user.set('email', email);
-            user.set('nome', nome);
-            user.set('sobrenome', sobrenome);
+            user.set('nome', nome);  // Campo personalizado "nome"
+            user.set('sobrenome', sobrenome);  // Campo personalizado "sobrenome"
 
             try {
-                await user.signUp();
+                const newUser = await user.signUp();
+                console.log("Usuário cadastrado com sucesso:", newUser);
                 alert('Usuário cadastrado com sucesso!');
                 document.getElementById('cadastroUsuarioForm').reset();
             } catch (error) {

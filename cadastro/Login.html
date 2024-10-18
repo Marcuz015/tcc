@@ -9,11 +9,11 @@
     <h1>Login</h1>
 
     <form id="loginForm">
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" required><br><br>
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" required placeholder="Digite seu username"><br><br>
 
         <label for="senha">Senha:</label><br>
-        <input type="password" id="senha" name="senha" required><br><br>
+        <input type="password" id="senha" name="senha" required placeholder="Digite sua senha"><br><br>
 
         <button type="submit">Entrar</button>
     </form>
@@ -27,17 +27,18 @@
         document.getElementById('loginForm').addEventListener('submit', async function (e) {
             e.preventDefault(); // Previne o envio padrão do formulário
 
-            const email = document.getElementById('email').value;
+            const username = document.getElementById('username').value;
             const senha = document.getElementById('senha').value;
 
-            if (!email || !senha) {
+            if (!username || !senha) {
                 alert('Por favor, preencha todos os campos!');
                 return;
             }
 
             try {
-                console.log('Tentando logar com:', email);
-                const user = await Parse.User.logIn(email, senha);
+                console.log('Tentando logar com o username:', username);
+                // Faz o login com o username e senha
+                const user = await Parse.User.logIn(username, senha);
                 alert('Login bem-sucedido! Bem-vindo, ' + user.get('nome'));
                 console.log('Usuário logado com sucesso:', user);
                 // Redirecionamento pós-login, se necessário

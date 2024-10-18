@@ -34,7 +34,7 @@
    <div class="container">
     <ul class="navbar">
         <li class="links-navbar"><a href="../index.html"><i class="bi bi-house"></i></a></li>
-        <li class="links-navbar"><a href="#"><i class="bi bi-cart3"></i></a></li>
+        <li class="links-navbar"><a href="../pages/carrinho.html"><i class="bi bi-cart3"></i></a></li>
         <li class="links-navbar"><a href="../pages/about.html"><i class="bi bi-pencil"></i></a></li>
         <li class="links-navbar"><a href="../pages/perfil.html"><i class="bi bi-person"></i></a></li>
     </ul>
@@ -67,7 +67,7 @@ function verificarLogin() {
     
     if (!currentUser) {
         // Se o usuário não estiver logado, redirecionar para a página de login
-        window.location.href = "/cadastro/cadastroUser.html";
+        window.location.href = "/cadastro/Cadastro.html";
     }
 }
 
@@ -75,7 +75,7 @@ function verificarLogin() {
 function fazerLogout() {
     Parse.User.logOut().then(() => {
         // Redirecionar para a página de login após logout
-        window.location.href = "/cadastro/cadastroUser.html";
+        window.location.href = "/cadastro/Cadastro.html";
     }).catch(error => {
         console.error("Erro ao fazer logout: ", error);
     });
