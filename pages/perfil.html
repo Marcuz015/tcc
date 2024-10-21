@@ -43,9 +43,16 @@
 
   <header class="mt-72 w-full h-[320px]">
     <div class="w-full h-full flex flex-col justify-center items-center">
-        <img id="profile-picture-img" class="bg-white shadow-lg w-40 h-40 rounded-full hover:scale-110 duration-300">
+        <img id="profile-picture-img" class="bg-white shadow-lg w-40 h-40 rounded-full hover:scale-110 duration-300" alt="Foto de Perfil">
+        <h2 id="nome-usuario" class="mt-4 text-xl font-bold"></h2> <!-- Nome do usuário será exibido aqui -->
         <button id="choose-picture-btn" class="bg-black text-xl py-2 px-2 flex group relative font-bold mb-2 mt-4 rounded-2xl text-white p-5">Foto de perfil</button>
         <input type="file" id="picture-input" accept="image/*" hidden>
+        <button id="settings-btn" class="text-gray-500 text-2xl mt-4"><i class="bi bi-gear"></i></button> <!-- Ícone da engrenagem -->
+        <div id="user-info" class="hidden mt-4 p-4 bg-gray-200 rounded-lg">
+            <!-- Informações adicionais -->
+            <p><strong>Email:</strong> <span id="email-usuario"></span></p>
+            <p><strong>Nome Completo:</strong> <span id="nome-completo-usuario"></span></p>
+        </div>
     </div>
   </header> 
 
@@ -58,34 +65,47 @@
   <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
   <script>
     // Inicialize o Parse com as suas chaves do Back4App
-Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB1b7vlkFPdG9OgZFCLhpvz7"); 
-Parse.serverURL = 'https://parseapi.back4app.com';
+    Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB1b7vlkFPdG9OgZFCLhpvz7"); 
+    Parse.serverURL = 'https://parseapi.back4app.com';
 
-// Função para verificar se o usuário está logado
-function verificarLogin() {
-    const currentUser = Parse.User.current();
-    
-    if (!currentUser) {
-        // Se o usuário não estiver logado, redirecionar para a página de login
-        window.location.href = "/cadastro/Cadastro.html";
+    // Função para verificar se o usuário está logado
+    function verificarLogin() {
+        const currentUser = Parse.User.current();
+        
+        if (!currentUser) {
+            // Se o usuário não estiver logado, redirecionar para a página de login
+            window.location.href = "/cadastro/Cadastro.html";
+        } else {
+            // Exibir o nome do usuário logado na página
+            document.getElementById('nome-usuario').textContent = currentUser.get('username');
+
+            // Mostrar mais informações ao clicar na engrenagem
+            document.getElementById('email-usuario').textContent = currentUser.get('email');
+            document.getElementById('nome-completo-usuario').textContent = currentUser.get('nome') + ' ' + currentUser.get('sobrenome');
+        }
     }
-}
 
-// Função para logout
-function fazerLogout() {
-    Parse.User.logOut().then(() => {
-        // Redirecionar para a página de login após logout
-        window.location.href = "/cadastro/Cadastro.html";
-    }).catch(error => {
-        console.error("Erro ao fazer logout: ", error);
+    // Função para logout
+    function fazerLogout() {
+        Parse.User.logOut().then(() => {
+            // Redirecionar para a página de login após logout
+            window.location.href = "/cadastro/Cadastro.html";
+        }).catch(error => {
+            console.error("Erro ao fazer logout: ", error);
+        });
+    }
+
+    // Event listener para o botão de logout
+    document.getElementById("logout-button").addEventListener("click", fazerLogout);
+
+    // Mostrar e esconder informações do usuário ao clicar na engrenagem
+    document.getElementById("settings-btn").addEventListener("click", function() {
+        const userInfoDiv = document.getElementById('user-info');
+        userInfoDiv.classList.toggle('hidden'); // Alterna entre esconder e mostrar as informações
     });
-}
 
-// Event listener para o botão de logout
-document.getElementById("logout-button").addEventListener("click", fazerLogout);
-
-// Chama a função de verificação quando a página carregar
-document.addEventListener('DOMContentLoaded', verificarLogin);
+    // Chama a função de verificação quando a página carregar
+    document.addEventListener('DOMContentLoaded', verificarLogin);
 
   </script>
 

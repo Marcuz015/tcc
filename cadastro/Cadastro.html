@@ -64,9 +64,12 @@
 
             try {
                 const newUser = await user.signUp();
-                console.log("Usuário cadastrado com sucesso:", newUser);
-                alert('Usuário cadastrado com sucesso!');
+                console.log("Usuário cadastrado e logado com sucesso:", newUser);
+                alert('Usuário cadastrado e logado com sucesso!');
                 document.getElementById('cadastroUsuarioForm').reset();
+                
+                // Redirecionar automaticamente para o perfil do usuário
+                window.location.href = "/pages/perfil.html";
             } catch (error) {
                 console.error('Erro ao cadastrar usuário:', error);
                 alert('Erro ao cadastrar usuário: ' + error.message);

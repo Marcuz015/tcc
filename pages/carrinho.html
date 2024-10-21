@@ -73,36 +73,34 @@
         localStorage.setItem('cart', JSON.stringify(cart));
         reloadCartUI();
     }
-
-    // Carrega os itens do carrinho e exibe na interface
     function loadCart() {
-        const cartContainer = document.getElementById('cart-container');
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        cartContainer.innerHTML = '';  // Limpa a interface do carrinho antes de recarregar
-        let total = 0;
+    const cartContainer = document.getElementById('cart-container');
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cartContainer.innerHTML = '';  // Limpa a interface do carrinho antes de recarregar
+    let total = 0;
 
-        cart.forEach(item => {
-            const itemHTML = `
-                <div class="cart-item flex justify-between items-center border-b py-2">
-                    <div class="item-info flex items-center">
-                        <img src="${item.fotoFrente}" alt="${item.name}" class="product-image w-20 h-20 rounded-md mr-4">
-                        <div>
-                            <h2 class="item-title">${item.name}</h2>
-                            <p>Tamanhos:<button>PP</button> <button>P</button> <button>M</button> <button>G</button> <button>GG</button> </p>
-                        </div>
-                    </div>
-                    <div class="item-price flex items-center">
-                        <p class="price">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
-                        <button class="remove-btn ml-4 bg-red-500 text-white px-2 py-1 rounded">Remover</button>
+    cart.forEach(item => {
+        const itemHTML = `
+            <div class="cart-item flex justify-between items-center border-b py-2">
+                <div class="item-info flex items-center">
+                    <img src="${item.fotoFrente}" alt="${item.name}" class="product-image w-20 h-20 rounded-md mr-4">
+                    <div>
+                        <h2 class="item-title">${item.name}</h2>
+                        <p>Tamanho: ${item.tamanho}</p> <!-- Exibindo o tamanho -->
                     </div>
                 </div>
-            `;
-            cartContainer.innerHTML += itemHTML;
-            total += item.price;
-        });
+                <div class="item-price flex items-center">
+                    <p class="price">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
+                    <button class="remove-btn ml-4 bg-red-500 text-white px-2 py-1 rounded">Remover</button>
+                </div>
+            </div>
+        `;
+        cartContainer.innerHTML += itemHTML;
+        total += item.price;
+    });
 
-        document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-    }
+    document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+}
 
     // Carrega o carrinho quando a página for carregada
     document.addEventListener('DOMContentLoaded', loadCart);
