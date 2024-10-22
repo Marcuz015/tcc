@@ -42,7 +42,8 @@
                 alert('Login bem-sucedido! Bem-vindo, ' + user.get('nome'));
                 console.log('Usuário logado com sucesso:', user);
                 // Redirecionamento pós-login, se necessário
-                // window.location.href = 'pagina_inicial.html'; 
+                // window.location.href = 'pagina_inicial.html';
+                window.location.href = "/pages/perfil.html"; 
             } catch (error) {
                 console.error('Erro ao logar:', error);
                 alert('Erro ao fazer login: ' + error.message);
