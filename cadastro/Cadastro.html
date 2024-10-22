@@ -4,30 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Usuários</title>
+
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../estilos/tailwind.css">
+    <link rel="stylesheet" href="../estilos/cadastro.css">
+    <!-- CSS -->
+
+
 </head>
-<body>
-    <h1>Cadastro de Usuários</h1>
+<body class="text-center justify-center items-center">
 
-    <form id="cadastroUsuarioForm">
-        <label for="username">Username:</label><br>
-        <input type="text" id="user" name="user" required placeholder="Qual nome de usuario deseja"><br><br>
+  <!-- Formulário de Cadastro -->
+<form class="form items-center justify-center text-center p-8 rounded-lg shadow-lg bg-gradient-to-b from-gray-800 to-black" id="cadastroUsuarioForm">
+    <h1 class="tituloCadastro text-center text-white font-bold text-2xl mb-6">Cadastro de Usuários</h1>
 
-        <label for="nome">Nome:</label><br>
-        <input type="text" id="nome" name="nome" required placeholder="Digite seu nome aqui"><br><br>
+    <span class="input-span">
+        <label class="label" for="user">Username:</label>
+        <input class="rounded-md p-2 bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none" type="text" id="user" name="user" required placeholder="Digite um username">
+    </span>
 
-        <label for="sobrenome">Sobrenome:</label><br>
-        <input type="text" id="sobrenome" name="sobrenome" required placeholder="Digite seu sobrenome"><br><br>
+    <span class="input-span">
+        <label class="label" for="nome">Nome:</label>
+        <input class="rounded-md p-2 bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none" type="text" id="nome" name="nome" required placeholder="Digite seu nome aqui">
+    </span>
 
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" required placeholder="Digite seu melhor email"><br><br>
+    <span class="input-span">
+        <label class="label" for="sobrenome">Sobrenome:</label>
+        <input class="rounded-md p-2 bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none" type="text" id="sobrenome" name="sobrenome" required placeholder="Digite seu sobrenome">
+    </span>
 
-        <label for="senha">Senha:</label><br>
-        <input type="password" id="senha" name="senha" required placeholder="Faça uma senha segura"><br><br>
+    <span class="input-span">
+        <label class="label" for="email">Email:</label>
+        <input class="rounded-md p-2 bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none" type="email" id="email" name="email" required placeholder="Digite seu melhor email">
+    </span>
 
-        <button type="submit">Cadastrar</button>
-    </form>
-<a href="Login.html"><button>já possuo conta</button></a>
-    <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+    <span class="input-span">
+        <label class="label" for="senha">Senha:</label>
+        <input class="rounded-md p-2 bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none" type="password" id="senha" name="senha" required placeholder="Faça uma senha segura">
+    </span>
+
+    <input class="submit bg-blue-600 text-white font-bold rounded-md p-2 hover:bg-blue-700 transition duration-300" type="submit" value="Cadastrar">
+    <a class="login text-white font-bold flex text-center justify-center items-center mt-4" href="../cadastro/Login.html">Já possuo cadastro!</a>
+</form>
+
+<!-- Link para login abaixo do formulário -->
+
+<script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+
+
     <script>
         // Inicializa o Parse com credenciais corretas
         Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB1b7vlkFPdG9OgZFCLhpvz7");
@@ -76,5 +101,7 @@
             }
         });
     </script>
+
+
 </body>
 </html>
