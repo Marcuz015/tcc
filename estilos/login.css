@@ -1,94 +1,104 @@
-
-
 body {
     background-image: url("../assets/bgLogin.jpg");
     background-position: center;
     background-size: cover;
     height: 100vh;
     background-repeat: no-repeat;
+    display: flex; /* Adicionado para centralização */
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    margin: 0; /* Remove margens padrão */
+  }
+  
+  .tituloCadastro {
+    margin-bottom: 24px;
+    text-align: center; /* Centraliza o texto do título */
+    color: white; /* Adicionei para garantir que o título seja legível sobre o fundo */
+  }
+  
+  form {
+    --bg-light: #efefef;
+    --bg-dark: #707070;
+    --clr: #58bc82;
+    --clr-alpha: #9c9c9c60;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-}
-
-.card {
-    width: 300px;
-    padding: 1.9rem 1.2rem;
-    text-align: center;
-    background: #000000;
-    border-radius: 20px;
-    margin-top: -80px;
-   }
-   
-   /*Inputs*/
-   .field {
-    margin-top: .5rem;
+    gap: 1rem;
+    width: 100%;
+    max-width: 300px;
+    background-color: rgba(0, 0, 0, 0.7); /* Fundo levemente escuro para o formulário */
+    border-radius: 8px; /* Bordas arredondadas */
+    padding: 20px; /* Espaçamento interno */
+  }
+  
+  form .input-span {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  form input[type="email"],
+  form input[type="password"],
+  form input[type="text"] { /* Incluído para o input de username */
+    border-radius: 0.5rem;
+    padding: 1rem 0.75rem;
+    width: 100%;
+    margin-top: -50px;
+    border: none;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: .5em;
-    background-color: #1f2029;
-    border-radius: 4px;
-    padding: .5em 1em;
-   }
-   
-   .input-icon {
-    height: 1em;
-    width: 1em;
-    fill: #46b83d;
-   }
-   
-   .input-field {
-    background: none;
-    border: none;
-    outline: none;
+    gap: 0.5rem;
+    background-color: var(--clr-alpha);
+    outline: 2px solid var(--bg-dark);
+  }
+  
+  form input[type="email"]:focus,
+  form input[type="password"]:focus,
+  form input[type="text"]:focus { /* Incluído para o input de username */
+    outline: 2px solid var(--clr);
+  }
+  
+  label {
+    margin-top: -20px;
+    align-self: flex-start;
+    color: var(--clr);
+    font-weight: 600;
+  }
+  
+  form .submit {
+    padding: 1rem 0.75rem;
     width: 100%;
-    color: #d3d3d3;
-   }
-   
-   /*Text*/
-   .title {
-    margin-bottom: 1rem;
-    font-size: 1.5em;
-    font-weight: 500;
-    color: #f5f5f5;
-   }
-   
-   /*Buttons*/
-   .btn {
-    margin: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 3rem;
+    background-color: var(--bg-dark);
+    color: var(--bg-light);
     border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    font-size: .8em;
-    text-transform: uppercase;
-    padding: 0.6em 1.2em;
-    background-color: #46b83d;
-    color: #f5f5f5;
-    box-shadow: 0 8px 24px 0 rgb(255 235 167 / 20%);
-    transition: all .3s ease-in-out;
-   }
-   
-   .btn-link {
-    color: #46b83d;
-    display: block;
-    font-size: .75em;
-    transition: color .3s ease-out;
-    font-size: 1rem;
-   }
-   
-   /*Hover & focus*/
-   .field input:focus::placeholder {
-    opacity: 0;
-    transition: opacity .3s;
-   }
-   
-   .btn:hover {
-    background-color: #5e6681;
-    color: #ffeba7;
-    box-shadow: 0 8px 24px 0 rgb(16 39 112 / 20%);
-   }
-   
-   .btn-link:hover {
-    color: #fff;
-   }
-   
+    cursor: pointer;
+    transition: all 300ms;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: -50px;
+  }
+  
+  form .submit:hover {
+    background-color: var(--clr);
+    color: var(--bg-dark);
+  }
+  
+  span {
+    text-decoration: none;
+    color: var(--bg-dark);
+  }
+  
+  span a {
+    color: var(--clr);
+  }
+  
+  .login:hover {
+    color: #58bc82;
+  }
+  

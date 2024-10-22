@@ -4,21 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../estilos/tailwind.css">
+    <link rel="stylesheet" href="../estilos/login.css">
+    <!-- CSS -->
+
 </head>
 <body>
-    <h1>Login</h1>
 
-    <form id="loginForm">
+    <!-- FORM -->
+    <form class="" id="loginForm">
+        <h1 class="tituloCadastro text-center text-white font-bold text-2xl mb-6">Bem vindo de volta!</h1>
         <label for="username">Username:</label><br>
         <input type="text" id="username" name="username" required placeholder="Digite seu username"><br><br>
 
         <label for="senha">Senha:</label><br>
         <input type="password" id="senha" name="senha" required placeholder="Digite sua senha"><br><br>
-
-        <button type="submit">Entrar</button>
+            <input class="submit text-white font-bold rounded-md p-2 text-center justify-center" type="submit" value="Logar">
     </form>
-
     <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
+    <!-- FORM -->
+
     <script>
         // Inicializa o Parse
         Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB1b7vlkFPdG9OgZFCLhpvz7"); // Substitua pelas suas credenciais do Back4App

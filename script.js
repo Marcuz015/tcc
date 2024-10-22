@@ -72,8 +72,8 @@ async function fetchAndRenderProducts() {
                         <p class="font-bold md:text-3xl text-xl">${nome}</p>
 
                         <label for="tamanhos-${index}">Selecione o tamanho:</label>
-                        <input list="Lista_Tamanhos" id="tamanhos-${index}" name="tamanhos"/>
-                        <datalist id="Lista_Tamanhos">
+                        <input class="rounded-2xl border-2 border-black shadow-md"list="Lista_Tamanhos" id="tamanhos-${index}" name="tamanhos"/>
+                        <datalist class="" id="Lista_Tamanhos">
                             <option value="PP"></option>
                             <option value="P"></option>
                             <option value="M"></option> 
