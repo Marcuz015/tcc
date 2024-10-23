@@ -1,0 +1,11 @@
+body {
+    background-image: url("../assets/bgMobile.jpg");
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    background-repeat: no-repeat;
+    display: flex; /* Adicionado para centralização */
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    margin: 0; /* Remove margens padrão */
+}
