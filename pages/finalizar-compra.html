@@ -26,16 +26,9 @@
             margin: 10px 0 5px;
         }
     </style>
-    <!-- CSS -->
-
-    <!-- JS -->
-    <script src="../js/finalizar.js"></script>
-    <!-- JS -->
-
 </head>
 <body>
-    
-    <h1 class="">Finalizar Compra</h1>
+    <h1 class="titulo_Fina">Finalizar Compra</h1>
     <div id="cart-summary"></div>
 
     <form id="checkout-form">
@@ -43,8 +36,14 @@
         <label for="nome">Nome Completo:</label>
         <input type="text" id="nome" name="nome" required>
 
+        <label for="CEP">CEP:</label>
+        <input type="text" id="CEP" name="CEP" required oninput="buscarEndereco()">
+
         <label for="endereco">Endereço:</label>
         <input type="text" id="endereco" name="endereco" required>
+
+        <label for="numero">Número da casa/apartamento:</label>
+        <input type="text" id="numero" name="numero" required>
 
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
@@ -53,55 +52,81 @@
     </form>
 
     <script>
-        // Carrega o carrinho do localStorage
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         const cartSummaryContainer = document.getElementById('cart-summary');
 
-        // Função para renderizar o resumo do carrinho
         function renderCartSummary() {
-            cartSummaryContainer.innerHTML = ''; // Limpa o container
+            cartSummaryContainer.innerHTML = '';
 
             if (cart.length === 0) {
                 cartSummaryContainer.innerHTML = '<p>Seu carrinho está vazio.</p>';
                 return;
             }
 
-            // Renderiza os itens do carrinho
             cart.forEach((item) => {
                 const itemHtml = `
                     <div class="product-item">
-                        <h3>${item.name}</h3>
-                        <p>Preço: R$ ${item.price.toFixed(2)}</p>
-                        <p>Tamanho: ${item.tamanho}</p>
+                        <div class="image-container">
+                            <img src="${item.fotoFrente}" alt="${item.name}" class="product-image">
+                        </div>
+                        <div class="product-details">
+                            <h3>${item.name}</h3>
+                            <div class="price-size">
+                                <p>Tamanho: ${item.tamanho}</p>
+                            </div>
+                        </div>
                     </div>
                 `;
                 cartSummaryContainer.innerHTML += itemHtml;
             });
 
-            // Calcula o total
             const total = cart.reduce((sum, item) => sum + item.price, 0);
             cartSummaryContainer.innerHTML += `<p><strong>Total: R$ ${total.toFixed(2)}</strong></p>`;
         }
 
-        // Renderiza o resumo do carrinho assim que a página carrega
         document.addEventListener('DOMContentLoaded', renderCartSummary);
 
-        // Evento de submissão do formulário
         document.getElementById('checkout-form').addEventListener('submit', function(event) {
             event.preventDefault();
 
-            // Pega os dados do formulário
             const nome = document.getElementById('nome').value;
             const endereco = document.getElementById('endereco').value;
             const email = document.getElementById('email').value;
 
-            // Aqui você pode enviar os dados do pedido para o servidor ou processar de outra forma
-            alert('Compra confirmada! Obrigado, ' + nome + '.');
+            const comprasRecentes = JSON.parse(localStorage.getItem('comprasRecentes')) || [];
+            const novaCompra = {
+                nomeCliente: nome,
+                endereco,
+                email,
+                itens: cart,
+                data: new Date().toLocaleString()
+            };
 
-            // Limpa o carrinho após a compra
+            comprasRecentes.push(novaCompra);
+            localStorage.setItem('comprasRecentes', JSON.stringify(comprasRecentes));
+
             localStorage.removeItem('cart');
-            window.location.href = 'index.html'; // Redireciona para a página inicial ou outra página
+
+            alert('Compra bem-sucedida!');
+            window.location.href = '/index.html';
         });
+
+        function buscarEndereco() {
+            const cep = document.getElementById('CEP').value;
+
+            if (cep.length === 8 && /^[0-9]{8}$/.test(cep)) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.erro) {
+                            document.getElementById('endereco').value = data.logradouro;
+                        } else {
+                            alert('CEP não encontrado.');
+                        }
+                    })
+                    .catch(error => console.error('Erro ao buscar o CEP:', error));
+            }
+        }
     </script>
 </body>
 </html>

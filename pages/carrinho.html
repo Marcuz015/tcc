@@ -61,123 +61,131 @@
 
     <!-- Botão Finalizar Compra -->
     <div class="checkout-btn-container">
-        <button class="checkout-btn"><a href="../pages/finalizar-compra.html">Finalizar compra</a></button>
+        <button class="checkout-btn" id="finalizar-compra-btn">Finalizar compra</button>
     </div>
 
+
     <script>
-        // Função para adicionar item ao carrinho com quantidade inicial 1
-        function addToCart(item) {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            
-            // Verifica se o item já está no carrinho
-            let existingItem = cart.find(cartItem => cartItem.name === item.name && cartItem.tamanho === item.tamanho);
+    // Função para verificar se o usuário está logado
+    function isUserLoggedIn() {
+    const loggedIn = localStorage.getItem('userLoggedIn');
+    console.log('Verificando se o usuário está logado:', loggedIn);
+    return loggedIn === 'true';
+}
 
-            if (existingItem) {
-                existingItem.quantity += 1;  // Se já estiver no carrinho, aumenta a quantidade
-            } else {
-                item.quantity = 1;  // Define a quantidade inicial como 1 para itens novos
-                cart.push(item);  // Adiciona o item ao carrinho
-            }
+// Função para redirecionar ao finalizar compra
+document.getElementById('finalizar-compra-btn').addEventListener('click', function() {
+    console.log('Botão de finalizar compra clicado. Usuário logado:', isUserLoggedIn());
+    if (isUserLoggedIn()) {
+        window.location.href = '../pages/finalizar-compra.html';
+    } else {
+        alert('Você precisa estar logado para finalizar a compra.');
+        window.location.href = '/cadastro/Login.html';  // Redireciona para a página de login
+    }
+});
 
-            localStorage.setItem('cart', JSON.stringify(cart));
-            reloadCartUI();
+    // Função para adicionar item ao carrinho com quantidade inicial 1
+    function addToCart(item) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        let existingItem = cart.find(cartItem => cartItem.name === item.name && cartItem.tamanho === item.tamanho);
+
+        if (existingItem) {
+            existingItem.quantity += 1; 
+        } else {
+            item.quantity = 1;  
+            cart.push(item);  
         }
 
-        // Função para carregar o carrinho
-        function loadCart() {
-            const cartContainer = document.getElementById('cart-container');
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cartContainer.innerHTML = '';  // Limpa a interface do carrinho antes de recarregar
-            let total = 0;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        reloadCartUI();
+        console.log('Carrinho atualizado:', cart);
+    }
 
-            cart.forEach(item => {
-                const itemHTML = `
-                    <div class="cart-item flex justify-between items-center border-b py-2">
-                        <div class="item-info flex items-center">
-                            <img src="${item.fotoFrente}" alt="${item.name}" class="product-image w-20 h-20 rounded-md mr-4">
-                            <div>
-                                <h2 class="item-title">${item.name}</h2>
-                                <p>Tamanho: ${item.tamanho}</p>
-                                <p>Quantidade: <input type="number" min="1" value="${item.quantity}" class="quantity-input"></p>
-                            </div>
-                        </div>
-                        <div class="item-price flex items-center">
-                            <p class="price">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</p>
-                            <button class="remove-btn ml-4 bg-red-500 text-white px-2 py-1 rounded">Remover</button>
+    // Função para carregar o carrinho
+    function loadCart() {
+        const cartContainer = document.getElementById('cart-container');
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cartContainer.innerHTML = '';  
+        let total = 0;
+
+        cart.forEach(item => {
+            const itemHTML = `
+                <div class="cart-item flex justify-between items-center border-b py-2">
+                    <div class="item-info flex items-center">
+                        <img src="${item.fotoFrente}" alt="${item.name}" class="product-image w-20 h-20 rounded-md mr-4">
+                        <div>
+                            <h2 class="item-title">${item.name}</h2>
+                            <p>Tamanho: ${item.tamanho}</p>
+                            <p>Quantidade: <input type="number" min="1" value="${item.quantity}" class="quantity-input"></p>
                         </div>
                     </div>
-                `;
-                cartContainer.innerHTML += itemHTML;
-                total += item.price * item.quantity;
-            });
-
-            document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-        }
-
-        // Carrega o carrinho quando a página for carregada
-        document.addEventListener('DOMContentLoaded', loadCart);
-
-        // Manipula os eventos de clique para remover itens e atualizar quantidades
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('remove-btn')) {
-                const item = event.target.closest('.cart-item');
-                const itemTitle = item.querySelector('.item-title').innerText;
-                const itemSize = item.querySelector('p').innerText.replace('Tamanho: ', '');
-                removeItemFromCart(itemTitle, itemSize);
-                item.remove();
-                updateTotal();
-            }
-
-            // Evento para finalizar a compra
-            if (event.target.classList.contains('checkout-btn')) {
-                checkLoginAndProceed();
-                window.location.href = "/pages/finalizar-compra.html"; 
-            }
+                    <div class="item-price flex items-center">
+                        <p class="price">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</p>
+                        <button class="remove-btn ml-4 bg-red-500 text-white px-2 py-1 rounded">Remover</button>
+                    </div>
+                </div>
+            `;
+            cartContainer.innerHTML += itemHTML;
+            total += item.price * item.quantity;
         });
 
-        // Atualiza a quantidade e o preço total ao alterar o valor no input de quantidade
-        document.addEventListener('input', function(event) {
-            if (event.target.classList.contains('quantity-input')) {
-                const cart = JSON.parse(localStorage.getItem('cart')) || [];
-                const itemElement = event.target.closest('.cart-item');
-                const itemTitle = itemElement.querySelector('.item-title').innerText;
-                const itemSize = itemElement.querySelector('p').innerText.replace('Tamanho: ', '');
-                let selectedItem = cart.find(item => item.name === itemTitle && item.tamanho === itemSize);
-                const newQuantity = parseInt(event.target.value, 10);
+        document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    }
 
-                if (newQuantity >= 1) {
-                    selectedItem.quantity = newQuantity;
-                    localStorage.setItem('cart', JSON.stringify(cart));
-                    reloadCartUI();
-                }
+    document.addEventListener('DOMContentLoaded', loadCart);
+
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('remove-btn')) {
+            const item = event.target.closest('.cart-item');
+            const itemTitle = item.querySelector('.item-title').innerText;
+            const itemSize = item.querySelector('p').innerText.replace('Tamanho: ', '');
+            removeItemFromCart(itemTitle, itemSize);
+            item.remove();
+            updateTotal();
+        }
+    });
+
+    document.addEventListener('input', function(event) {
+        if (event.target.classList.contains('quantity-input')) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const itemElement = event.target.closest('.cart-item');
+            const itemTitle = itemElement.querySelector('.item-title').innerText;
+            const itemSize = itemElement.querySelector('p').innerText.replace('Tamanho: ', '');
+            let selectedItem = cart.find(item => item.name === itemTitle && item.tamanho === itemSize);
+            const newQuantity = parseInt(event.target.value, 10);
+
+            if (newQuantity >= 1) {
+                selectedItem.quantity = newQuantity;
+                localStorage.setItem('cart', JSON.stringify(cart));
+                reloadCartUI();
             }
+        }
+    });
+
+    function removeItemFromCart(name, tamanho) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart = cart.filter(item => !(item.name === name && item.tamanho === tamanho));
+        localStorage.setItem('cart', JSON.stringify(cart));
+        reloadCartUI();
+    }
+
+    function reloadCartUI() {
+        document.getElementById('cart-container').innerHTML = '';
+        loadCart();
+    }
+
+    function updateTotal() {
+        let total = 0;
+        document.querySelectorAll('.cart-item').forEach(item => {
+            const priceText = item.querySelector('.price').innerText;
+            const price = parseFloat(priceText.replace('R$', '').replace(',', '.'));
+            total += price;
         });
+        document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    }
+</script>
 
-        // Remove o item do carrinho com base no nome e no tamanho
-        function removeItemFromCart(name, tamanho) {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart = cart.filter(item => !(item.name === name && item.tamanho === tamanho));
-            localStorage.setItem('cart', JSON.stringify(cart));
-            reloadCartUI();
-        }
-
-        // Recarrega a interface do carrinho
-        function reloadCartUI() {
-            document.getElementById('cart-container').innerHTML = '';
-            loadCart();
-        }
-
-        // Atualiza o valor total do carrinho
-        function updateTotal() {
-            let total = 0;
-            document.querySelectorAll('.cart-item').forEach(item => {
-                const priceText = item.querySelector('.price').innerText;
-                const price = parseFloat(priceText.replace('R$', '').replace(',', '.'));
-                total += price;
-            });
-            document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-        }
-    </script>
-
+    
 </body>
 </html>

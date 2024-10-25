@@ -5,31 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil do Usuário</title>
 
-    <!-- FAVICON -->
-    <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
-    <!-- FAVICON -->
-
-    <!-- CSS -->
+    <!-- CSS e Icones -->
     <link rel="stylesheet" href="../estilos/perfil.css">
     <link rel="stylesheet" href="../estilos/tailwind.css">
     <link rel="stylesheet" href="../estilos/produtos.css">
-    <!-- CSS -->
-
-    <!-- ICONS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- ICONS -->
-
-    <!-- FONTES -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Freeman&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Freeman&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Yatra+One&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Freeman&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&family=Yatra+One&display=swap" rel="stylesheet">
-    <!-- FONTES -->
 </head>
-
 <body>
-
    <!-- NAVBAR -->
    <div class="container">
     <ul class="navbar">
@@ -43,71 +25,73 @@
 
   <header class="mt-72 w-full h-[320px]">
     <div class="w-full h-full flex flex-col justify-center items-center">
-        <img id="profile-picture-img" class="bg-white shadow-lg w-40 h-40 rounded-full hover:scale-110 duration-300" alt="Foto de Perfil">
-        <h2 id="nome-usuario" class="mt-4 text-xl font-bold"></h2> <!-- Nome do usuário será exibido aqui -->
-        <button id="choose-picture-btn" class="bg-black text-xl py-2 px-2 flex group relative font-bold mb-2 mt-4 rounded-2xl text-white p-5">Foto de perfil</button>
-        <input type="file" id="picture-input" accept="image/*" hidden>
-        <button id="settings-btn" class="text-gray-500 text-2xl mt-4"><i class="bi bi-gear"></i></button> <!-- Ícone da engrenagem -->
-        <div id="user-info" class="hidden mt-4 p-4 bg-gray-200 rounded-lg">
-            <!-- Informações adicionais -->
-            <p><strong>Email:</strong> <span id="email-usuario"></span></p>
-            <p><strong>Nome Completo:</strong> <span id="nome-completo-usuario"></span></p>
-        </div>
+        <img id="profile-picture-img" class="bg-white shadow-lg w-40 h-40 rounded-full" alt="Foto de Perfil">
+        <h2 id="nome-usuario" class="mt-4 text-xl font-bold"></h2>
+        <p id="email-usuario" class="text-gray-500"></p>
     </div>
   </header> 
 
-  <!-- Botão de Logout -->
-  <div class="text-center">
-    <button id="logout-button" class="bg-black text-xl py-2 px-4 rounded-2xl text-white mt-4">Logout</button>
+  <!-- Seção de Compras Recentes -->
+  <div id="compras-recentes" class="p-4">
+      <h2 class="text-2xl font-semibold">Compras Recentes</h2>
+      <div id="recent-purchases-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4"></div>
   </div>
 
-  <!-- Parse JavaScript SDK -->
-  <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
-  <script>
-    // Inicialize o Parse com as suas chaves do Back4App
-    Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB1b7vlkFPdG9OgZFCLhpvz7"); 
-    Parse.serverURL = 'https://parseapi.back4app.com';
-
-    // Função para verificar se o usuário está logado
-    function verificarLogin() {
-        const currentUser = Parse.User.current();
+<script>
+    // Função para carregar informações do usuário logado
+    function loadUserProfile() {
+        const user = JSON.parse(localStorage.getItem('loggedUser'));
         
-        if (!currentUser) {
-            // Se o usuário não estiver logado, redirecionar para a página de login
-            window.location.href = "/cadastro/Cadastro.html";
+        if (user) {
+            document.getElementById('nome-usuario').innerText = `${user.nome} ${user.sobrenome}`;
+            document.getElementById('email-usuario').innerText = user.email;
+            document.getElementById('profile-picture-img').src = user.fotoPerfil || "../assets/default-profile.png";
         } else {
-            // Exibir o nome do usuário logado na página
-            document.getElementById('nome-usuario').textContent = currentUser.get('username');
-
-            // Mostrar mais informações ao clicar na engrenagem
-            document.getElementById('email-usuario').textContent = currentUser.get('email');
-            document.getElementById('nome-completo-usuario').textContent = currentUser.get('nome') + ' ' + currentUser.get('sobrenome');
+            // Se não estiver logado, redireciona para a página de login (ou exibe uma mensagem)
+            alert("Por favor, faça login para acessar o perfil.");
+            window.location.href = "../pages/login.html";
         }
     }
 
-    // Função para logout
-    function fazerLogout() {
-        Parse.User.logOut().then(() => {
-            // Redirecionar para a página de login após logout
-            window.location.href = "/cadastro/Cadastro.html";
-        }).catch(error => {
-            console.error("Erro ao fazer logout: ", error);
-        });
+    // Carrega e exibe as compras recentes do localStorage
+    function loadRecentPurchases() {
+        const comprasRecentes = JSON.parse(localStorage.getItem('comprasRecentes')) || [];
+        const recentPurchasesList = document.getElementById('recent-purchases-list');
+
+        if (comprasRecentes.length > 0) {
+            comprasRecentes.forEach(compra => {
+                const compraHtml = `
+                    <div class="compra-item border p-4 rounded-lg shadow">
+                        <h3 class="text-lg font-bold">Compra realizada em: ${compra.data}</h3>
+                        <p>Cliente: ${compra.nomeCliente}</p>
+                        <p>Endereço: ${compra.endereco}</p>
+                        <h4 class="mt-2 text-md font-semibold">Itens:</h4>
+                        <ul class="mt-1">
+                            ${compra.itens.map(item => `
+                                <li class="flex items-center mt-2">
+                                    <img src="${item.fotoFrente}" alt="${item.name}" class="w-12 h-12 mr-4 rounded">
+                                    <div>
+                                        <p class="font-semibold">${item.name}</p>
+                                        <p>Tamanho: ${item.tamanho}</p>
+                                        <p>Preço: R$ ${item.price.toFixed(2)}</p>
+                                    </div>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+                recentPurchasesList.innerHTML += compraHtml;
+            });
+        } else {
+            recentPurchasesList.innerHTML = "<p>Você ainda não realizou compras recentes.</p>";
+        }
     }
 
-    // Event listener para o botão de logout
-    document.getElementById("logout-button").addEventListener("click", fazerLogout);
-
-    // Mostrar e esconder informações do usuário ao clicar na engrenagem
-    document.getElementById("settings-btn").addEventListener("click", function() {
-        const userInfoDiv = document.getElementById('user-info');
-        userInfoDiv.classList.toggle('hidden'); // Alterna entre esconder e mostrar as informações
+    // Executa as funções ao carregar a página
+    document.addEventListener('DOMContentLoaded', () => {
+        loadUserProfile();
+        loadRecentPurchases();
     });
-
-    // Chama a função de verificação quando a página carregar
-    document.addEventListener('DOMContentLoaded', verificarLogin);
-
-  </script>
-
+</script>
 </body>
 </html>
