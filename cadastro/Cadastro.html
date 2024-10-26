@@ -3,105 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Usuários</title>
-
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="../estilos/tailwind.css">
+    <title>Cadastro</title>
     <link rel="stylesheet" href="../estilos/cadastro.css">
-    <!-- CSS -->
-
-
 </head>
-<body class="text-center justify-center items-center">
+<body>
+    <div class="container">
+        <h2 class="tituloCadastro">Cadastro</h2>
+        <form id="cadastro-form">
+            <div class="input-span">
+                <label for="username">Username</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="input-span">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" required>
+            </div>
+            <div class="input-span">
+                <label for="sobrenome">Sobrenome</label>
+                <input type="text" id="sobrenome" required>
+            </div>
+            <div class="input-span">
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="input-span">
+                <label for="password">Senha</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit" class="submit">Cadastrar</button>
+        </form>
+    </div>
 
-  <!-- Formulário de Cadastro -->
-<form class="form items-center justify-center text-center p-8 rounded-lg shadow-lg bg-gradient-to-b from-gray-800 to-black" id="cadastroUsuarioForm">
-    <h1 class="tituloCadastro text-center text-white font-bold text-2xl mb-6">Cadastro de Usuários</h1>
+    <!-- Incluindo o SDK do Parse -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/3.4.4/parse.min.js"></script>
 
-    <span class="input-span">
-        <label class="label" for="user">Username:</label>
-        <input class="rounded-md p-2 bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none" type="text" id="user" name="user" required placeholder="Digite um username">
-    </span>
-
-    <span class="input-span">
-        <label class="label" for="nome">Nome:</label>
-        <input class="rounded-md p-2 bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none" type="text" id="nome" name="nome" required placeholder="Digite seu nome aqui">
-    </span>
-
-    <span class="input-span">
-        <label class="label" for="sobrenome">Sobrenome:</label>
-        <input class="rounded-md p-2 bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none" type="text" id="sobrenome" name="sobrenome" required placeholder="Digite seu sobrenome">
-    </span>
-
-    <span class="input-span">
-        <label class="label" for="email">Email:</label>
-        <input class="rounded-md p-2 bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none" type="email" id="email" name="email" required placeholder="Digite seu melhor email">
-    </span>
-
-    <span class="input-span">
-        <label class="label" for="senha">Senha:</label>
-        <input class="rounded-md p-2 bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none" type="password" id="senha" name="senha" required placeholder="Faça uma senha segura">
-    </span>
-
-    <input class="submit bg-blue-600 text-white font-bold rounded-md p-2 hover:bg-blue-700 transition duration-300" type="submit" value="Cadastrar">
-    <a class="login text-white font-bold flex text-center justify-center items-center mt-4" href="../cadastro/Login.html">Já possuo cadastro!</a>
-</form>
-
-<!-- Link para login abaixo do formulário -->
-
-<script src="https://unpkg.com/parse/dist/parse.min.js"></script>
-
-
+    <!-- Configuração do Parse -->
     <script>
-        // Inicializa o Parse com credenciais corretas
-        Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB1b7vlkFPdG9OgZFCLhpvz7");
-        Parse.serverURL = 'https://parseapi.back4app.com/';
-
-        document.getElementById('cadastroUsuarioForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
-
-            const username = document.getElementById('user').value;
-            const nome = document.getElementById('nome').value;
-            const sobrenome = document.getElementById('sobrenome').value;
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('senha').value;
-
-            // Verificar se os campos estão preenchidos
-            if (!nome || !sobrenome || !email || !senha || !username) {
-                alert('Por favor, preencha todos os campos!');
-                return;
-            }
-
-            console.log("Iniciando cadastro...");
-            console.log("Username:", username);
-            console.log("Nome:", nome);
-            console.log("Sobrenome:", sobrenome);
-            console.log("Email:", email);
-
-            // Criar o usuário usando Parse.User
-            const user = new Parse.User();
-            user.set('username', username);  // Usar o valor do campo "Username"
-            user.set('password', senha);
-            user.set('email', email);
-            user.set('nome', nome);  // Campo personalizado "nome"
-            user.set('sobrenome', sobrenome);  // Campo personalizado "sobrenome"
-
-            try {
-                const newUser = await user.signUp();
-                console.log("Usuário cadastrado e logado com sucesso:", newUser);
-                alert('Usuário cadastrado e logado com sucesso!');
-                document.getElementById('cadastroUsuarioForm').reset();
-                
-                // Redirecionar automaticamente para o perfil do usuário
-                window.location.href = "/pages/perfil.html";
-            } catch (error) {
-                console.error('Erro ao cadastrar usuário:', error);
-                alert('Erro ao cadastrar usuário: ' + error.message);
-            }
-        });
+Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB1b7vlkFPdG9OgZFCLhpvz7");
+Parse.serverURL = 'https://parseapi.back4app.com/';
     </script>
 
-
+    <script src="../js/Cadastro.js"></script>
 </body>
 </html>

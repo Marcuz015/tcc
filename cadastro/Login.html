@@ -1,59 +1,38 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <!DOCTYPE html>
+    <html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <link rel="stylesheet" href="../estilos/login.css">
+        <link rel="stylesheet" href="../estilos/tailwind.css"> <!-- Inclua o tailwind se necessário -->
+    </head>
+    <body>
+        <div class="container">
+            <h2 class="tituloLogin">Login</h2>
+            <form id="login-form">
+                <div class="input-span">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="input-span">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="submit">Entrar</button>
+                <span>Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></span>
+            </form>
+        </div>
+            <!-- Incluindo o SDK do Parse -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/3.4.4/parse.min.js"></script>
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="../estilos/tailwind.css">
-    <link rel="stylesheet" href="../estilos/login.css">
-    <!-- CSS -->
-
-</head>
-<body>
-
-    <!-- FORM -->
-    <form id="loginForm">
-        <h1 class="tituloCadastro text-center text-white font-bold text-2xl mb-6">Bem-vindo de volta!</h1>
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username" required placeholder="Digite seu username"><br><br>
-
-        <label for="senha">Senha:</label><br>
-        <input type="password" id="senha" name="senha" required placeholder="Digite sua senha"><br><br>
-        <input class="submit text-white font-bold rounded-md p-2 text-center justify-center" type="submit" value="Logar">
-        <button style="background-color: #58bc82; border-radius: 20px; width: 60%;"><a href="Cadastro.html">Não possuo conta</a></button>
-    </form>
-    <script src="https://unpkg.com/parse/dist/parse.min.js"></script>
-
+    <!-- Configuração do Parse -->
     <script>
-        // Inicializa o Parse
-        Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB1b7vlkFPdG9OgZFCLhpvz7");
-        Parse.serverURL = 'https://parseapi.back4app.com/';
-
-        document.getElementById('loginForm').addEventListener('submit', async function (e) {
-            e.preventDefault(); // Previne o envio padrão do formulário
-
-            const username = document.getElementById('username').value;
-            const senha = document.getElementById('senha').value;
-
-            try {
-    console.log('Tentando logar com o username:', username);
-    // Faz o login com o username e senha
-    const user = await Parse.User.logIn(username, senha);
-    alert('Login bem-sucedido! Bem-vindo, ' + user.get('nome'));
-    console.log('Usuário logado com sucesso:', user);
-    
-    // Aqui, adicione o seguinte para definir o estado de login
-    localStorage.setItem('userLoggedIn', 'true'); // Armazena que o usuário está logado
-    
-    // Redirecionamento pós-login, se necessário
-    window.location.href = "/pages/perfil.html"; 
-} catch (error) {
-    console.error('Erro ao logar:', error);
-    alert('Erro ao fazer login: ' + error.message);
-}
-        });
+Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB1b7vlkFPdG9OgZFCLhpvz7");
+Parse.serverURL = 'https://parseapi.back4app.com/';
     </script>
-</body>
-</html>
+
+    <script src="../js/Login.js"></script>
+
+    </body>
+    </html>

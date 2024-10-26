@@ -7,7 +7,6 @@
 
     <!-- FAVICON -->
     <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
-    <!-- FAVICON -->
 
     <!-- CSS -->
     <link rel="stylesheet" href="../estilos/style.css">
@@ -49,9 +48,7 @@
     <h1 class="text-4xl font-bold items-center text-center mt-4">Seu carrinho</h1>
 
     <!-- Contêiner do Carrinho -->
-    <div class="cart-container" id="cart-container">
-        <!-- Os itens do carrinho serão adicionados aqui pelo script -->
-    </div>
+    <div class="cart-container" id="cart-container"></div>
 
     <!-- Total -->
     <div class="cart-total">
@@ -64,128 +61,111 @@
         <button class="checkout-btn" id="finalizar-compra-btn">Finalizar compra</button>
     </div>
 
+    <!-- Botão temporário de Logout -->
+    <div class="logout-btn-container">
+        <button onclick="logout()">Logout</button>
+    </div>
 
+    
     <script>
-    // Função para verificar se o usuário está logado
-    function isUserLoggedIn() {
-    const loggedIn = localStorage.getItem('userLoggedIn');
-    console.log('Verificando se o usuário está logado:', loggedIn);
-    return loggedIn === 'true';
-}
-
-// Função para redirecionar ao finalizar compra
-document.getElementById('finalizar-compra-btn').addEventListener('click', function() {
-    console.log('Botão de finalizar compra clicado. Usuário logado:', isUserLoggedIn());
-    if (isUserLoggedIn()) {
-        window.location.href = '../pages/finalizar-compra.html';
-    } else {
-        alert('Você precisa estar logado para finalizar a compra.');
-        window.location.href = '/cadastro/Login.html';  // Redireciona para a página de login
-    }
-});
-
-    // Função para adicionar item ao carrinho com quantidade inicial 1
-    function addToCart(item) {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        
-        let existingItem = cart.find(cartItem => cartItem.name === item.name && cartItem.tamanho === item.tamanho);
-
-        if (existingItem) {
-            existingItem.quantity += 1; 
-        } else {
-            item.quantity = 1;  
-            cart.push(item);  
+        // Função para verificar se o usuário está logado
+        function isUserLoggedIn() {
+            const loggedIn = localStorage.getItem('userLoggedIn');
+            return loggedIn === 'true';
         }
-
-        localStorage.setItem('cart', JSON.stringify(cart));
-        reloadCartUI();
-        console.log('Carrinho atualizado:', cart);
-    }
-
-    // Função para carregar o carrinho
-    function loadCart() {
-        const cartContainer = document.getElementById('cart-container');
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        cartContainer.innerHTML = '';  
-        let total = 0;
-
-        cart.forEach(item => {
-            const itemHTML = `
-                <div class="cart-item flex justify-between items-center border-b py-2">
-                    <div class="item-info flex items-center">
-                        <img src="${item.fotoFrente}" alt="${item.name}" class="product-image w-20 h-20 rounded-md mr-4">
-                        <div>
-                            <h2 class="item-title">${item.name}</h2>
-                            <p>Tamanho: ${item.tamanho}</p>
-                            <p>Quantidade: <input type="number" min="1" value="${item.quantity}" class="quantity-input"></p>
+    
+        // Função para redirecionar ao finalizar compra
+        document.getElementById('finalizar-compra-btn').addEventListener('click', function() {
+            if (!isUserLoggedIn()) {
+                alert('Você precisa estar logado para finalizar a compra.');
+                window.location.href = '../cadastro/Login.html';
+            } else {
+                window.location.href = '../pages/finalizar-compra.html';
+            }
+        });
+    
+        // Função para carregar o carrinho e atualizar a interface
+        function loadCart() {
+            const cartContainer = document.getElementById('cart-container');
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cartContainer.innerHTML = '';
+            let total = 0;
+    
+            cart.forEach(item => {
+                item.price = parseFloat(item.price) || 0;
+                item.quantity = parseInt(item.quantity) || 1;
+    
+                const itemHTML = `
+                    <div class="cart-item flex justify-between items-center border-b py-2">
+                        <div class="item-info flex items-center">
+                            <img src="${item.fotoFrente}" alt="${item.name}" class="product-image w-20 h-20 rounded-md mr-4">
+                            <div>
+                                <h2 class="item-title">${item.name}</h2>
+                                <p>Tamanho: ${item.tamanho}</p>
+                                <p>Quantidade: <input type="number" min="1" value="${item.quantity}" class="quantity-input" onchange="updateQuantity('${item.name}', '${item.tamanho}', this.value)"></p>
+                            </div>
+                        </div>
+                        <div class="item-price flex items-center">
+                            <p class="price">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</p>
+                            <button class="remove-btn ml-4 bg-red-500 text-white px-2 py-1 rounded" onclick="removeFromCart('${item.name}', '${item.tamanho}')">Remover</button>
                         </div>
                     </div>
-                    <div class="item-price flex items-center">
-                        <p class="price">R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</p>
-                        <button class="remove-btn ml-4 bg-red-500 text-white px-2 py-1 rounded">Remover</button>
-                    </div>
-                </div>
-            `;
-            cartContainer.innerHTML += itemHTML;
-            total += item.price * item.quantity;
-        });
-
-        document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-    }
-
-    document.addEventListener('DOMContentLoaded', loadCart);
-
-    document.addEventListener('click', function(event) {
-        if (event.target.classList.contains('remove-btn')) {
-            const item = event.target.closest('.cart-item');
-            const itemTitle = item.querySelector('.item-title').innerText;
-            const itemSize = item.querySelector('p').innerText.replace('Tamanho: ', '');
-            removeItemFromCart(itemTitle, itemSize);
-            item.remove();
-            updateTotal();
+                `;
+                cartContainer.innerHTML += itemHTML;
+                total += item.price * item.quantity;
+            });
+    
+            document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
         }
-    });
-
-    document.addEventListener('input', function(event) {
-        if (event.target.classList.contains('quantity-input')) {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const itemElement = event.target.closest('.cart-item');
-            const itemTitle = itemElement.querySelector('.item-title').innerText;
-            const itemSize = itemElement.querySelector('p').innerText.replace('Tamanho: ', '');
-            let selectedItem = cart.find(item => item.name === itemTitle && item.tamanho === itemSize);
-            const newQuantity = parseInt(event.target.value, 10);
-
-            if (newQuantity >= 1) {
-                selectedItem.quantity = newQuantity;
+    
+        // Função para adicionar um item ao carrinho
+        function addToCart(item) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingItemIndex = cart.findIndex(cartItem => cartItem.name === item.name && cartItem.tamanho === item.tamanho);
+    
+            if (existingItemIndex > -1) {
+                // Se o item já existe no carrinho, incrementa a quantidade
+                cart[existingItemIndex].quantity += 1; // Aumenta a quantidade em 1
+            } else {
+                // Se não existe, adiciona o novo item
+                cart.push(item);
+            }
+    
+            // Atualiza o localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+            // Recarrega a interface do carrinho
+            reloadCartUI();
+        }
+    
+        // Função para atualizar a quantidade de um item no carrinho
+        function updateQuantity(name, tamanho, newQuantity) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const itemIndex = cart.findIndex(item => item.name === name && item.tamanho === tamanho);
+    
+            if (itemIndex > -1) {
+                const quantity = parseInt(newQuantity) || 1; // Garante que a quantidade seja pelo menos 1
+                cart[itemIndex].quantity = quantity; // Atualiza a quantidade
                 localStorage.setItem('cart', JSON.stringify(cart));
                 reloadCartUI();
             }
         }
-    });
-
-    function removeItemFromCart(name, tamanho) {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        cart = cart.filter(item => !(item.name === name && item.tamanho === tamanho));
-        localStorage.setItem('cart', JSON.stringify(cart));
-        reloadCartUI();
-    }
-
-    function reloadCartUI() {
-        document.getElementById('cart-container').innerHTML = '';
-        loadCart();
-    }
-
-    function updateTotal() {
-        let total = 0;
-        document.querySelectorAll('.cart-item').forEach(item => {
-            const priceText = item.querySelector('.price').innerText;
-            const price = parseFloat(priceText.replace('R$', '').replace(',', '.'));
-            total += price;
-        });
-        document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-    }
-</script>
-
+    
+        // Função para remover um item do carrinho
+        function removeFromCart(name, tamanho) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart = cart.filter(item => !(item.name === name && item.tamanho === tamanho));
+            localStorage.setItem('cart', JSON.stringify(cart));
+            reloadCartUI();
+        }
+    
+        // Função para recarregar a interface do carrinho
+        function reloadCartUI() {
+            loadCart();
+        }
+    
+        // Carregar o carrinho quando a página for carregada
+        document.addEventListener('DOMContentLoaded', loadCart);
+    </script>    
     
 </body>
 </html>

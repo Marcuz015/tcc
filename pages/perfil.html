@@ -37,61 +37,6 @@
       <div id="recent-purchases-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4"></div>
   </div>
 
-<script>
-    // Função para carregar informações do usuário logado
-    function loadUserProfile() {
-        const user = JSON.parse(localStorage.getItem('loggedUser'));
-        
-        if (user) {
-            document.getElementById('nome-usuario').innerText = `${user.nome} ${user.sobrenome}`;
-            document.getElementById('email-usuario').innerText = user.email;
-            document.getElementById('profile-picture-img').src = user.fotoPerfil || "../assets/default-profile.png";
-        } else {
-            // Se não estiver logado, redireciona para a página de login (ou exibe uma mensagem)
-            alert("Por favor, faça login para acessar o perfil.");
-            window.location.href = "../pages/login.html";
-        }
-    }
-
-    // Carrega e exibe as compras recentes do localStorage
-    function loadRecentPurchases() {
-        const comprasRecentes = JSON.parse(localStorage.getItem('comprasRecentes')) || [];
-        const recentPurchasesList = document.getElementById('recent-purchases-list');
-
-        if (comprasRecentes.length > 0) {
-            comprasRecentes.forEach(compra => {
-                const compraHtml = `
-                    <div class="compra-item border p-4 rounded-lg shadow">
-                        <h3 class="text-lg font-bold">Compra realizada em: ${compra.data}</h3>
-                        <p>Cliente: ${compra.nomeCliente}</p>
-                        <p>Endereço: ${compra.endereco}</p>
-                        <h4 class="mt-2 text-md font-semibold">Itens:</h4>
-                        <ul class="mt-1">
-                            ${compra.itens.map(item => `
-                                <li class="flex items-center mt-2">
-                                    <img src="${item.fotoFrente}" alt="${item.name}" class="w-12 h-12 mr-4 rounded">
-                                    <div>
-                                        <p class="font-semibold">${item.name}</p>
-                                        <p>Tamanho: ${item.tamanho}</p>
-                                        <p>Preço: R$ ${item.price.toFixed(2)}</p>
-                                    </div>
-                                </li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                `;
-                recentPurchasesList.innerHTML += compraHtml;
-            });
-        } else {
-            recentPurchasesList.innerHTML = "<p>Você ainda não realizou compras recentes.</p>";
-        }
-    }
-
-    // Executa as funções ao carregar a página
-    document.addEventListener('DOMContentLoaded', () => {
-        loadUserProfile();
-        loadRecentPurchases();
-    });
-</script>
+<script src="../js/Perfil.js"></script>
 </body>
 </html>
