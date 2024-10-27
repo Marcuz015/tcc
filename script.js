@@ -3,6 +3,36 @@ Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB
 Parse.serverURL = 'https://parseapi.back4app.com/';
 
 let cart = JSON.parse(localStorage.getItem('cart')) || []; // Mantém os itens do carrinho persistentes
+const inactivityTimeLimit = 15 * 60 * 1000; // 15 minutos de inatividade para logout automático
+let inactivityTimer;
+
+// Função para deslogar o usuário
+function logoutUser() {
+    Parse.User.logOut().then(() => {
+        localStorage.removeItem('currentUser'); // Remove o usuário do localStorage
+        window.location.href = "/login"; // Redireciona para a página de login
+    }).catch((error) => {
+        console.error("Erro ao deslogar:", error);
+    });
+}
+
+// Reinicia o temporizador de inatividade
+function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(logoutUser, inactivityTimeLimit);
+}
+
+// Adiciona eventos para detectar atividades do usuário
+window.onload = resetInactivityTimer;
+document.onmousemove = resetInactivityTimer;
+document.onkeypress = resetInactivityTimer;
+document.onclick = resetInactivityTimer;
+document.onscroll = resetInactivityTimer;
+
+// Logout ao fechar ou atualizar a página
+window.addEventListener("beforeunload", (event) => {
+    logoutUser();
+});
 
 // Função para adicionar produto ao carrinho
 function addToCart(name, price, fotoFrenteUrl, tamanho) {

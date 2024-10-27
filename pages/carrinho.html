@@ -57,33 +57,30 @@
     </div>
 
     <!-- Botão Finalizar Compra -->
-    <div class="checkout-btn-container">
-        <button class="checkout-btn" id="finalizar-compra-btn">Finalizar compra</button>
-    </div>
-
-    <!-- Botão temporário de Logout -->
-    <div class="logout-btn-container">
-        <button onclick="logout()">Logout</button>
-    </div>
+<!-- Botão Finalizar Compra -->
+<div class="checkout-btn-container">
+    <button class="checkout-btn" id="finalizar-compra-btn" onclick="finalizarCompra()">Finalizar compra</button>
+</div>
 
     
-    <script>
-        // Função para verificar se o usuário está logado
-        function isUserLoggedIn() {
-            const loggedIn = localStorage.getItem('userLoggedIn');
-            return loggedIn === 'true';
-        }
-    
-        // Função para redirecionar ao finalizar compra
-        document.getElementById('finalizar-compra-btn').addEventListener('click', function() {
-            if (!isUserLoggedIn()) {
-                alert('Você precisa estar logado para finalizar a compra.');
-                window.location.href = '../cadastro/Login.html';
-            } else {
-                window.location.href = '../pages/finalizar-compra.html';
-            }
-        });
-    
+    <script>    
+// Função para verificar login e redirecionar para finalizar compra
+function finalizarCompra() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+
+    if (!user) {
+        // Se não houver dados do usuário, redireciona para a página de login
+        window.location.href = '../cadastro/login.html';
+    } else {
+        // Se o usuário estiver logado, redireciona para a página de finalização de compra
+        window.location.href = './finalizar-compra.html';
+    }
+}
+
+// Carregar o carrinho quando a página for carregada
+document.addEventListener('DOMContentLoaded', loadCart);
+
+
         // Função para carregar o carrinho e atualizar a interface
         function loadCart() {
             const cartContainer = document.getElementById('cart-container');

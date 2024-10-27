@@ -52,10 +52,11 @@
     </form>
 
     <script>
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
         const cartSummaryContainer = document.getElementById('cart-summary');
+        const cepOrigem = '01001000'; // CEP do centro de São Paulo
 
-        function renderCartSummary() {
+        function renderCartSummary(totalFrete = 0) {
             cartSummaryContainer.innerHTML = '';
 
             if (cart.length === 0) {
@@ -80,11 +81,45 @@
                 cartSummaryContainer.innerHTML += itemHtml;
             });
 
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            cartSummaryContainer.innerHTML += `<p><strong>Total: R$ ${total.toFixed(2)}</strong></p>`;
+            const totalProdutos = cart.reduce((sum, item) => sum + item.price, 0);
+            const total = totalProdutos + totalFrete;
+
+            cartSummaryContainer.innerHTML += `
+                <p><strong>Subtotal: R$ ${totalProdutos.toFixed(2)}</strong></p>
+                <p><strong>Frete: R$ ${totalFrete.toFixed(2)}</strong></p>
+                <p><strong>Total: R$ ${total.toFixed(2)}</strong></p>
+            `;
         }
 
-        document.addEventListener('DOMContentLoaded', renderCartSummary);
+        function calcularFrete(cepDestino) {
+            fetch(`https://api.correios.com/frete?cepOrigem=${cepOrigem}&cepDestino=${cepDestino}&peso=1&formato=1&comprimento=20&altura=5&largura=15&diametro=0&servico=41106`)
+                .then(response => response.json())
+                .then(data => {
+                    const valorFrete = parseFloat(data.valor.replace(",", "."));
+                    renderCartSummary(valorFrete);
+                })
+                .catch(error => console.error('Erro ao calcular o frete:', error));
+        }
+
+        function buscarEndereco() {
+            const cep = document.getElementById('CEP').value;
+
+            if (cep.length === 8 && /^[0-9]{8}$/.test(cep)) {
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.erro) {
+                            document.getElementById('endereco').value = data.logradouro;
+                            calcularFrete(cep);
+                        } else {
+                            alert('CEP não encontrado.');
+                        }
+                    })
+                    .catch(error => console.error('Erro ao buscar o CEP:', error));
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => renderCartSummary());
 
         document.getElementById('checkout-form').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -110,23 +145,6 @@
             alert('Compra bem-sucedida!');
             window.location.href = '/index.html';
         });
-
-        function buscarEndereco() {
-            const cep = document.getElementById('CEP').value;
-
-            if (cep.length === 8 && /^[0-9]{8}$/.test(cep)) {
-                fetch(`https://viacep.com.br/ws/${cep}/json/`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (!data.erro) {
-                            document.getElementById('endereco').value = data.logradouro;
-                        } else {
-                            alert('CEP não encontrado.');
-                        }
-                    })
-                    .catch(error => console.error('Erro ao buscar o CEP:', error));
-            }
-        }
     </script>
 </body>
 </html>
