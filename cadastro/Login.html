@@ -5,11 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Login</title>
         <link rel="stylesheet" href="../estilos/login.css">
-        <link rel="stylesheet" href="../estilos/tailwind.css"> <!-- Inclua o tailwind se necessário -->
+        <link rel="stylesheet" href="../estilos/tailwind.css">
     </head>
     <body>
         <div class="container">
-            <h2 class="tituloLogin">Login</h2>
+            <h2 class="tituloCadastro font-bold">Login</h2>
             <form id="login-form">
                 <div class="input-span">
                     <label for="username">Username</label>
@@ -23,15 +23,16 @@
                 <span>Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></span>
             </form>
         </div>
+
+
+
             <!-- Incluindo o SDK do Parse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/3.4.4/parse.min.js"></script>
-
     <!-- Configuração do Parse -->
     <script>
 Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB1b7vlkFPdG9OgZFCLhpvz7");
 Parse.serverURL = 'https://parseapi.back4app.com/';
     </script>
-
     <script src="../js/Login.js"></script>
 
     </body>

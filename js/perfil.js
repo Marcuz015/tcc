@@ -23,7 +23,7 @@ function loadRecentPurchases() {
   const purchasesList = document.getElementById('recent-purchases-list');
 
   if (recentPurchases.length === 0) {
-      purchasesList.innerHTML = '<p>Nenhuma compra recente.</p>';
+      purchasesList.innerHTML = '<p class="font-bold">Nenhuma compra recente.</p>';
   } else {
       recentPurchases.forEach(purchase => {
           const purchaseItem = document.createElement('div');

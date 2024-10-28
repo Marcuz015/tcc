@@ -15,9 +15,6 @@
             padding: 10px;
             margin-bottom: 10px;
         }
-        .product-item h3 {
-            margin: 0;
-        }
         form {
             margin-top: 20px;
         }
@@ -25,14 +22,35 @@
             display: block;
             margin: 10px 0 5px;
         }
+            .carousel-container {
+        position: relative;
+        width: 100%;
+        max-width: 300px; /* Largura máxima do carrossel */
+        margin: 20px auto;
+        overflow: hidden;
+        border-radius: 5px;
+    }
+
+    .carousel-slide {
+        display: flex;
+        transition: transform 0.5s ease;
+    }
+
+    .carousel-slide img {
+        width: 150px; /* Ajuste para o tamanho desejado da imagem */
+        height: 150px; /* Ajuste para o tamanho desejado da imagem */
+        object-fit: cover; /* Ajusta a imagem para preencher o espaço definido */
+        border-radius: 5px;
+    }
+
     </style>
 </head>
 <body>
-    <h1 class="titulo_Fina">Finalizar Compra</h1>
-    <div id="cart-summary"></div>
+    <h1 class="tituloFina">Finalizar Compra</h1>
 
     <form id="checkout-form">
         <h2>Informações de Entrega</h2>
+        
         <label for="nome">Nome Completo:</label>
         <input type="text" id="nome" name="nome" required>
 
@@ -48,69 +66,77 @@
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
 
-        <button type="submit">Confirmar Compra</button>
+        <!-- Carrossel de Produtos -->
+        <div class="carousel-container">
+            <div class="carousel-slide" id="carousel-slide">
+                <!-- Imagens do carrossel vão aqui -->
+            </div>
+        </div>
+
+        <!-- Informações de Resumo e Preço -->
+        <div id="cart-summary">
+            <!-- Resumo do carrinho e preços vão aqui -->
+        </div>
+
+        <button class="btn-finalizar" type="submit">Confirmar Compra</button>
     </form>
 
     <script>
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
         const cartSummaryContainer = document.getElementById('cart-summary');
-        const cepOrigem = '01001000'; // CEP do centro de São Paulo
+        const carouselSlide = document.getElementById('carousel-slide');
+        let currentSlide = 0;
 
         function renderCartSummary(totalFrete = 0) {
             cartSummaryContainer.innerHTML = '';
+            carouselSlide.innerHTML = '';
 
             if (cart.length === 0) {
                 cartSummaryContainer.innerHTML = '<p>Seu carrinho está vazio.</p>';
                 return;
             }
 
+            // Carrossel de imagens dos produtos
             cart.forEach((item) => {
-                const itemHtml = `
-                    <div class="product-item">
-                        <div class="image-container">
-                            <img src="${item.fotoFrente}" alt="${item.name}" class="product-image">
-                        </div>
-                        <div class="product-details">
-                            <h3>${item.name}</h3>
-                            <div class="price-size">
-                                <p>Tamanho: ${item.tamanho}</p>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                cartSummaryContainer.innerHTML += itemHtml;
+                const imgElement = document.createElement('img');
+                imgElement.src = item.fotoFrente;
+                imgElement.alt = item.name;
+                carouselSlide.appendChild(imgElement);
             });
 
             const totalProdutos = cart.reduce((sum, item) => sum + item.price, 0);
             const total = totalProdutos + totalFrete;
 
-            cartSummaryContainer.innerHTML += `
+            cartSummaryContainer.innerHTML = `
                 <p><strong>Subtotal: R$ ${totalProdutos.toFixed(2)}</strong></p>
                 <p><strong>Frete: R$ ${totalFrete.toFixed(2)}</strong></p>
                 <p><strong>Total: R$ ${total.toFixed(2)}</strong></p>
             `;
+
+            // Inicia o carrossel automático
+            startAutoCarousel();
         }
 
-        function calcularFrete(cepDestino) {
-            fetch(`https://api.correios.com/frete?cepOrigem=${cepOrigem}&cepDestino=${cepDestino}&peso=1&formato=1&comprimento=20&altura=5&largura=15&diametro=0&servico=41106`)
-                .then(response => response.json())
-                .then(data => {
-                    const valorFrete = parseFloat(data.valor.replace(",", "."));
-                    renderCartSummary(valorFrete);
-                })
-                .catch(error => console.error('Erro ao calcular o frete:', error));
+        // Função de movimentação automática do carrossel
+        function startAutoCarousel() {
+            const slides = document.querySelectorAll('.carousel-slide img');
+            const totalSlides = slides.length;
+
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                const offset = -currentSlide * slides[0].clientWidth;
+                carouselSlide.style.transform = `translateX(${offset}px)`;
+            }, 3000); // Altera a imagem a cada 3 segundos
         }
 
         function buscarEndereco() {
             const cep = document.getElementById('CEP').value;
-
             if (cep.length === 8 && /^[0-9]{8}$/.test(cep)) {
                 fetch(`https://viacep.com.br/ws/${cep}/json/`)
                     .then(response => response.json())
                     .then(data => {
                         if (!data.erro) {
                             document.getElementById('endereco').value = data.logradouro;
-                            calcularFrete(cep);
                         } else {
                             alert('CEP não encontrado.');
                         }
@@ -139,7 +165,6 @@
 
             comprasRecentes.push(novaCompra);
             localStorage.setItem('comprasRecentes', JSON.stringify(comprasRecentes));
-
             localStorage.removeItem('cart');
 
             alert('Compra bem-sucedida!');

@@ -1,19 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap');
+
 body {
   background-image: url("../assets/bgLogin.jpg");
   background-position: center;
   background-size: cover;
-  height: 100vh;
+  height: 105vh;
   background-repeat: no-repeat;
-  display: flex; /* Adicionado para centralização */
-  align-items: center; /* Centraliza verticalmente */
-  justify-content: center; /* Centraliza horizontalmente */
-  margin: 0; /* Remove margens padrão */
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
 }
 
 .tituloCadastro {
-  margin-bottom: 24px;
-  text-align: center; /* Centraliza o texto do título */
-  color: white; /* Adicionei para garantir que o título seja legível sobre o fundo */
+  margin-bottom: 5px;
+  text-align: center;
+  color: white;
+  font-size: 3rem;
+  letter-spacing: 2px;
+  font-family: "DynaPuff", system-ui;
 }
 
 form {
@@ -27,9 +38,9 @@ form {
   gap: 1rem;
   width: 100%;
   max-width: 300px;
-  background-color: rgba(0, 0, 0, 0.7); /* Fundo levemente escuro para o formulário */
-  border-radius: 8px; /* Bordas arredondadas */
-  padding: 20px; /* Espaçamento interno */
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
+  padding: 20px;
 }
 
 form .input-span {
@@ -41,21 +52,18 @@ form .input-span {
 
 form input[type="email"],
 form input[type="password"],
-form input[type="text"] { /* Incluído para o input de username */
+form input[type="text"] {
   border-radius: 0.5rem;
   padding: 1rem 0.75rem;
   width: 100%;
   border: none;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
   background-color: var(--clr-alpha);
   outline: 2px solid var(--bg-dark);
 }
 
 form input[type="email"]:focus,
 form input[type="password"]:focus,
-form input[type="text"]:focus { /* Incluído para o input de username */
+form input[type="text"]:focus {
   outline: 2px solid var(--clr);
 }
 
@@ -68,9 +76,6 @@ label {
 form .submit {
   padding: 1rem 0.75rem;
   width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
   border-radius: 3rem;
   background-color: var(--bg-dark);
   color: var(--bg-light);
