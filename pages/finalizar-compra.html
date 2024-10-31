@@ -9,47 +9,11 @@
     <link rel="stylesheet" href="../estilos/tailwind.css">
     <link rel="stylesheet" href="../estilos/finalizar.css">
 
-    <style>
-        .product-item {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        form {
-            margin-top: 20px;
-        }
-        label {
-            display: block;
-            margin: 10px 0 5px;
-        }
-            .carousel-container {
-        position: relative;
-        width: 100%;
-        max-width: 300px; /* Largura máxima do carrossel */
-        margin: 20px auto;
-        overflow: hidden;
-        border-radius: 5px;
-    }
-
-    .carousel-slide {
-        display: flex;
-        transition: transform 0.5s ease;
-    }
-
-    .carousel-slide img {
-        width: 150px; /* Ajuste para o tamanho desejado da imagem */
-        height: 150px; /* Ajuste para o tamanho desejado da imagem */
-        object-fit: cover; /* Ajusta a imagem para preencher o espaço definido */
-        border-radius: 5px;
-    }
-
-    </style>
 </head>
 <body>
     <h1 class="tituloFina">Finalizar Compra</h1>
 
     <form id="checkout-form">
-        <h2>Informações de Entrega</h2>
         
         <label for="nome">Nome Completo:</label>
         <input type="text" id="nome" name="nome" required>
