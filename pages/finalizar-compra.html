@@ -50,6 +50,7 @@
         const cartSummaryContainer = document.getElementById('cart-summary');
         const carouselSlide = document.getElementById('carousel-slide');
         let currentSlide = 0;
+        let frete = 0;
 
         function renderCartSummary(totalFrete = 0) {
             cartSummaryContainer.innerHTML = '';
@@ -101,6 +102,7 @@
                     .then(data => {
                         if (!data.erro) {
                             document.getElementById('endereco').value = data.logradouro;
+                            calcularFrete(cep);
                         } else {
                             alert('CEP não encontrado.');
                         }
@@ -109,7 +111,17 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => renderCartSummary());
+        function calcularFrete(cep) {
+            // Verifica se o CEP é do estado de São Paulo (prefixo 01 a 19)
+            if (cep.startsWith("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19")) {
+                frete = 15.00; // Frete para SP
+            } else {
+                frete = 30.00; // Frete para outros estados
+            }
+            renderCartSummary(frete);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => renderCartSummary(frete));
 
         document.getElementById('checkout-form').addEventListener('submit', function(event) {
             event.preventDefault();
