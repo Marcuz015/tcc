@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esqueci a Senha</title>
+    <link rel="stylesheet" href="../estilos/login.css">
+    <link rel="stylesheet" href="../estilos/tailwind.css">
+</head>
+<body>
+    <div class="container">
+        <h2 class="tituloCadastro font-bold">Esqueci a Senha</h2>
+        <form id="forgot-password-form">
+            <div class="input-span">
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+            </div>
+            <button type="submit" class="submit">Enviar Email de Redefinição</button>
+            <span>Voltar para <a href="login.html">Login</a></span>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/3.4.4/parse.min.js"></script>
+    <script>
+        Parse.initialize("OEwZoFZ1YRhiEAKSM3o08SPWscNrLt6kTiWhjWWM", "fplCVBTYJw9iQrfUdB1b7vlkFPdG9OgZFCLhpvz7");
+        Parse.serverURL = 'https://parseapi.back4app.com/';
+
+        document.getElementById('forgot-password-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita o envio do formulário
+
+            const email = document.getElementById('email').value;
+
+            // Envia o email de redefinição de senha
+            Parse.User.requestPasswordReset(email).then(() => {
+                alert('Email de redefinição de senha enviado com sucesso!');
+            }).catch((error) => {
+                alert(`Erro: ${error.message}`);
+            });
+        });
+    </script>
+</body>
+</html>

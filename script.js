@@ -35,7 +35,7 @@ window.addEventListener("beforeunload", (event) => {
 });
 
 // Função para adicionar produto ao carrinho
-function addToCart(name, price, fotoFrenteUrl, tamanho) {
+function addToCart(name, price, fotoFrenteUrl, tamanho, tamanhoInput) {
     if (!tamanho) {
         Swal.fire({
             icon: 'warning',
@@ -63,6 +63,9 @@ function addToCart(name, price, fotoFrenteUrl, tamanho) {
     const item = { name, price, fotoFrente: fotoFrenteUrl, tamanho };
     cart.push(item);
     localStorage.setItem('cart', JSON.stringify(cart)); // Salva o carrinho no localStorage
+    
+    // Limpa o campo de tamanho para nova seleção
+    tamanhoInput.value = '';
 }
 
 // Evento de clique para adicionar produtos ao carrinho
@@ -77,14 +80,8 @@ document.addEventListener('click', function(event) {
         const tamanhoInput = productCard.querySelector('input[list="Lista_Tamanhos"]');
         const tamanho = tamanhoInput.value;
 
-        // Verifica e fixa o tamanho selecionado, removendo o datalist
-        if (tamanho) {
-            tamanhoInput.value = tamanho;
-            tamanhoInput.removeAttribute('list');
-        }
-
-        // Adiciona ao carrinho
-        addToCart(name, price, fotoFrenteUrl, tamanho);
+        // Adiciona ao carrinho e limpa o campo de tamanho
+        addToCart(name, price, fotoFrenteUrl, tamanho, tamanhoInput);
     }
 });
 

@@ -10,33 +10,38 @@
     <link rel="stylesheet" href="../estilos/tailwind.css">
     <link rel="stylesheet" href="../estilos/produtos.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- SDK -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parse/3.4.4/parse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
 </head>
 <body>
-   <!-- NAVBAR -->
-   <div class="container">
-    <ul class="navbar">
-        <li class="links-navbar"><a href="../index.html"><i class="bi bi-house"></i></a></li>
-        <li class="links-navbar"><a href="../pages/carrinho.html"><i class="bi bi-cart3"></i></a></li>
-        <li class="links-navbar"><a href="../pages/about.html"><i class="bi bi-pencil"></i></a></li>
-        <li class="links-navbar"><a href="../pages/perfil.html"><i class="bi bi-person"></i></a></li>
-    </ul>
-  </div>
-  <!-- NAVBAR -->
-
-  <header class="mt-72 w-full h-[320px]">
-    <div class="w-full h-full flex flex-col justify-center items-center">
-        <img id="profile-picture-img" class="bg-white shadow-lg w-40 h-40 rounded-full" alt="">
-        <h2 id="nome-usuario" class="mt-4 text-xl font-bold text-white nomeUsuario"></h2>
-        <p id="email-usuario" class="text-white"></p>
+    <!-- NAVBAR -->
+    <div class="container">
+        <ul class="navbar">
+            <li class="links-navbar"><a href="../index.html"><i class="bi bi-house"></i></a></li>
+            <li class="links-navbar"><a href="../pages/carrinho.html"><i class="bi bi-cart3"></i></a></li>
+            <li class="links-navbar"><a href="../pages/about.html"><i class="bi bi-pencil"></i></a></li>
+            <li class="links-navbar"><a href="../pages/perfil.html"><i class="bi bi-person"></i></a></li>
+        </ul>
     </div>
-  </header> 
+    <!-- NAVBAR -->
 
-  <!-- Seção de Compras Recentes -->
-  <div id="compras-recentes" class="p-4">
-      <h2 class="text-2xl font-semibold">Compras Recentes</h2>
-      <div id="recent-purchases-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4"></div>
-  </div>
+    <header class="mt-72 w-full h-[320px]">
+        <div class="w-full h-full flex flex-col justify-center items-center">
+            <img id="profile-picture-img" class="bg-white shadow-lg w-40 h-40 rounded-full" alt="">
+            <h2 id="nome-usuario" class="mt-4 text-xl font-bold text-white nomeUsuario"></h2>
+            <p id="email-usuario" class="text-white"></p><br>
+            <button id="logout-button">Deslogar</button>
+        </div>
+    </header> 
 
-<script src="../js/Perfil.js"></script>
+    <!-- Seção de Compras Recentes -->
+    <div id="compras-recentes" class="p-4">
+        <h2 class="text-2xl font-semibold">Compras Recentes</h2>
+        <div id="recent-purchases-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4"></div>
+    </div>
+
+    <script src="../js/Perfil.js"></script>
 </body>
 </html>

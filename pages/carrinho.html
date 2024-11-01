@@ -57,29 +57,26 @@
     </div>
 
     <!-- Botão Finalizar Compra -->
-<!-- Botão Finalizar Compra -->
-<div class="checkout-btn-container">
-    <button class="checkout-btn" id="finalizar-compra-btn" onclick="finalizarCompra()">Finalizar compra</button>
-</div>
+    <div class="checkout-btn-container">
+        <button class="checkout-btn" id="finalizar-compra-btn" onclick="finalizarCompra()">Finalizar compra</button>
+    </div>
 
-    
-    <script>    
-// Função para verificar login e redirecionar para finalizar compra
-function finalizarCompra() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
+    <script>
+        // Função para verificar login e redirecionar para finalizar compra
+        function finalizarCompra() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
 
-    if (!user) {
-        // Se não houver dados do usuário, redireciona para a página de login
-        window.location.href = '../cadastro/login.html';
-    } else {
-        // Se o usuário estiver logado, redireciona para a página de finalização de compra
-        window.location.href = './finalizar-compra.html';
-    }
-}
+            if (!user) {
+                // Se não houver dados do usuário, redireciona para a página de login
+                window.location.href = '../cadastro/login.html';
+            } else {
+                // Se o usuário estiver logado, redireciona para a página de finalização de compra
+                window.location.href = './finalizar-compra.html';
+            }
+        }
 
-// Carregar o carrinho quando a página for carregada
-document.addEventListener('DOMContentLoaded', loadCart);
-
+        // Carregar o carrinho quando a página for carregada
+        document.addEventListener('DOMContentLoaded', loadCart);
 
         // Função para carregar o carrinho e atualizar a interface
         function loadCart() {
@@ -87,11 +84,11 @@ document.addEventListener('DOMContentLoaded', loadCart);
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             cartContainer.innerHTML = '';
             let total = 0;
-    
+
             cart.forEach(item => {
                 item.price = parseFloat(item.price) || 0;
                 item.quantity = parseInt(item.quantity) || 1;
-    
+
                 const itemHTML = `
                     <div class="cart-item flex justify-between items-center border-b py-2">
                         <div class="item-info flex items-center">
@@ -111,15 +108,15 @@ document.addEventListener('DOMContentLoaded', loadCart);
                 cartContainer.innerHTML += itemHTML;
                 total += item.price * item.quantity;
             });
-    
+
             document.querySelector('.total-price').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
         }
-    
+
         // Função para adicionar um item ao carrinho
         function addToCart(item) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             const existingItemIndex = cart.findIndex(cartItem => cartItem.name === item.name && cartItem.tamanho === item.tamanho);
-    
+
             if (existingItemIndex > -1) {
                 // Se o item já existe no carrinho, incrementa a quantidade
                 cart[existingItemIndex].quantity += 1; // Aumenta a quantidade em 1
@@ -127,41 +124,33 @@ document.addEventListener('DOMContentLoaded', loadCart);
                 // Se não existe, adiciona o novo item
                 cart.push(item);
             }
-    
+
             // Atualiza o localStorage
             localStorage.setItem('cart', JSON.stringify(cart));
             // Recarrega a interface do carrinho
-            reloadCartUI();
+            loadCart(); // Atualiza a UI
         }
-    
+
         // Função para atualizar a quantidade de um item no carrinho
         function updateQuantity(name, tamanho, newQuantity) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             const itemIndex = cart.findIndex(item => item.name === name && item.tamanho === tamanho);
-    
+
             if (itemIndex > -1) {
                 const quantity = parseInt(newQuantity) || 1; // Garante que a quantidade seja pelo menos 1
                 cart[itemIndex].quantity = quantity; // Atualiza a quantidade
                 localStorage.setItem('cart', JSON.stringify(cart));
-                reloadCartUI();
+                loadCart(); // Atualiza a UI
             }
         }
-    
+
         // Função para remover um item do carrinho
         function removeFromCart(name, tamanho) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             cart = cart.filter(item => !(item.name === name && item.tamanho === tamanho));
             localStorage.setItem('cart', JSON.stringify(cart));
-            reloadCartUI();
+            loadCart(); // Atualiza a UI
         }
-    
-        // Função para recarregar a interface do carrinho
-        function reloadCartUI() {
-            loadCart();
-        }
-    
-        // Carregar o carrinho quando a página for carregada
-        document.addEventListener('DOMContentLoaded', loadCart);
     </script>    
     
 </body>
