@@ -137,7 +137,7 @@ async function fetchAndRenderProducts() {
                         <p class="text-lg">Coleção Exclusiva</p>
                         <p class="font-bold text-lg">R$ ${preco.toFixed(2)}</p>
                         <button class="bg-gray-950 text-white px-5 rounded-lg mt-3 add-to-cart">
-                            <i class="bi bi-cart-plus text-lg"></i> Adicionar ao Carrinho
+                            <i class="bi bi-cart-plus text-lg"></i>
                         </button>
                     </div>
                 </div>
