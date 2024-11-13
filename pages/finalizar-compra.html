@@ -1,151 +1,50 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finalizar Compra</title>
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="../estilos/tailwind.css">
-    <link rel="stylesheet" href="../estilos/finalizar.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout com Stripe</title>
+  <script src="https://js.stripe.com/v3/"></script> <!-- Biblioteca Stripe.js -->
 </head>
 <body>
-    <h1 class="tituloFina">Finalizar Compra</h1>
+  <h1>Produtos no Carrinho</h1>
+  <ul>
+    <li>Produto 1 - R$100,00 x 2</li>
+    <li>Produto 2 - R$200,00 x 1</li>
+  </ul>
+  
+  <button id="checkout-button">Finalizar Compra</button>
 
-    <form id="checkout-form">
-        
-        <label for="nome">Nome Completo:</label>
-        <input type="text" id="nome" name="nome" required>
+  <script>
+    // Sua chave pública do Stripe (obtenha no painel do Stripe)
+    const stripe = Stripe('pk_test_51QGWasB1fsJERTpZub1EjKFzXIWwZrBRwjo1uEtYRYpBHRcMyezEe8rkVOIibOwo8ENbdL2ZrEa2im0F0FCDBJKO00z08jOo4m'); 
 
-        <label for="CEP">CEP:</label>
-        <input type="text" id="CEP" name="CEP" required oninput="buscarEndereco()">
+    // Quando o botão de checkout for clicado
+    document.getElementById('checkout-button').addEventListener('click', async () => {
+  console.log('Botão clicado'); // Verifique se o botão foi clicado
 
-        <label for="endereco">Endereço:</label>
-        <input type="text" id="endereco" name="endereco" required>
+  const response = await fetch('http://localhost:3000/create-checkout-session', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      items: [
+        { name: 'Produto 1', description: 'Descrição do produto 1', price: 100, quantity: 2 },
+        { name: 'Produto 2', description: 'Descrição do produto 2', price: 200, quantity: 1 }
+      ]
+    })
+  });
 
-        <label for="numero">Número da casa/apartamento:</label>
-        <input type="text" id="numero" name="numero" required>
+  console.log('Resposta recebida:', response); // Verifique a resposta da API
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+  const session = await response.json();
+  console.log('ID da sessão:', session.id); // Verifique o ID da sessão
 
-        <!-- Carrossel de Produtos -->
-        <div class="carousel-container">
-            <div class="carousel-slide" id="carousel-slide">
-                <!-- Imagens do carrossel vão aqui -->
-            </div>
-        </div>
+  const { error } = await stripe.redirectToCheckout({ sessionId: session.id });
+  if (error) {
+    console.error('Erro ao redirecionar para o checkout:', error);
+  }
+});
 
-        <!-- Informações de Resumo e Preço -->
-        <div id="cart-summary">
-            <!-- Resumo do carrinho e preços vão aqui -->
-        </div>
-
-        <button class="btn-finalizar" type="submit">Confirmar Compra</button>
-    </form>
-
-    <script>
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const cartSummaryContainer = document.getElementById('cart-summary');
-        const carouselSlide = document.getElementById('carousel-slide');
-        let currentSlide = 0;
-        let frete = 0;
-
-        function renderCartSummary(totalFrete = 0) {
-            cartSummaryContainer.innerHTML = '';
-            carouselSlide.innerHTML = '';
-
-            if (cart.length === 0) {
-                cartSummaryContainer.innerHTML = '<p>Seu carrinho está vazio.</p>';
-                return;
-            }
-
-            // Carrossel de imagens dos produtos
-            cart.forEach((item) => {
-                const imgElement = document.createElement('img');
-                imgElement.src = item.fotoFrente;
-                imgElement.alt = item.name;
-                carouselSlide.appendChild(imgElement);
-            });
-
-            const totalProdutos = cart.reduce((sum, item) => sum + item.price, 0);
-            const total = totalProdutos + totalFrete;
-
-            cartSummaryContainer.innerHTML = `
-                <p><strong>Subtotal: R$ ${totalProdutos.toFixed(2)}</strong></p>
-                <p><strong>Frete: R$ ${totalFrete.toFixed(2)}</strong></p>
-                <p><strong>Total: R$ ${total.toFixed(2)}</strong></p>
-            `;
-
-            // Inicia o carrossel automático
-            startAutoCarousel();
-        }
-
-        // Função de movimentação automática do carrossel
-        function startAutoCarousel() {
-            const slides = document.querySelectorAll('.carousel-slide img');
-            const totalSlides = slides.length;
-
-            setInterval(() => {
-                currentSlide = (currentSlide + 1) % totalSlides;
-                const offset = -currentSlide * slides[0].clientWidth;
-                carouselSlide.style.transform = `translateX(${offset}px)`;
-            }, 3000); // Altera a imagem a cada 3 segundos
-        }
-
-        function buscarEndereco() {
-            const cep = document.getElementById('CEP').value;
-            if (cep.length === 8 && /^[0-9]{8}$/.test(cep)) {
-                fetch(`https://viacep.com.br/ws/${cep}/json/`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (!data.erro) {
-                            document.getElementById('endereco').value = data.logradouro;
-                            calcularFrete(cep);
-                        } else {
-                            alert('CEP não encontrado.');
-                        }
-                    })
-                    .catch(error => console.error('Erro ao buscar o CEP:', error));
-            }
-        }
-
-        function calcularFrete(cep) {
-            // Verifica se o CEP é do estado de São Paulo (prefixo 01 a 19)
-            if (cep.startsWith("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19")) {
-                frete = 15.00; // Frete para SP
-            } else {
-                frete = 30.00; // Frete para outros estados
-            }
-            renderCartSummary(frete);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => renderCartSummary(frete));
-
-        document.getElementById('checkout-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const nome = document.getElementById('nome').value;
-            const endereco = document.getElementById('endereco').value;
-            const email = document.getElementById('email').value;
-
-            const comprasRecentes = JSON.parse(localStorage.getItem('comprasRecentes')) || [];
-            const novaCompra = {
-                nomeCliente: nome,
-                endereco,
-                email,
-                itens: cart,
-                data: new Date().toLocaleString()
-            };
-
-            comprasRecentes.push(novaCompra);
-            localStorage.setItem('comprasRecentes', JSON.stringify(comprasRecentes));
-            localStorage.removeItem('cart');
-
-            alert('Compra bem-sucedida!');
-            window.location.href = '/index.html';
-        });
-    </script>
+  </script>
 </body>
 </html>
